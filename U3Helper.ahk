@@ -2,6 +2,7 @@
 #NoEnv
 #Include mb_IniTools.ahk
 #Include mb_TextTools.ahk
+U3HVer = 1.2
 
 EnvGet U3_DEVICE_SERIAL, U3_DEVICE_SERIAL                    ; serial number of device (copy protection)
 EnvGet U3_DEVICE_PATH, U3_DEVICE_PATH                        ; drive letter to device (F:)
@@ -61,7 +62,7 @@ If 1 = config
   ; ##########################################################################
   
   Menu Tray, Icon
-  TrayTip Preparing %AppName% ..., U3Helper`n(c)2006 Markus Birth`nmbirth@webwriters.de, 3, 1
+  TrayTip Preparing %AppName% ..., U3Helper %U3HVer%`n(c)2006 Markus Birth`nmbirth@webwriters.de, 3, 1
   
   Status("Checking registry settings...")
   keycount = 0
@@ -258,10 +259,14 @@ Else If 1 = unconfig
   {
     If (Unattended = "0")
     {
-      MsgBox 4132, %AppName%: Foreign settings, Do you want to keep the changed settings for %AppName%?`n`n(Select No to revert to the former settings.)
+      MsgBox 4131, %AppName%: Foreign settings, Do you want to keep the changed settings for %AppName%?`n`n(Select No to revert to the former settings. Cancel to erase settings.)
       IfMsgBox No
       {
         RevertSettings := "1"
+      }
+      IfMsgBox Cancel
+      {
+        KeepSettings := "0"
       }
     }
     Else
@@ -284,7 +289,7 @@ Else If 1 = unconfig
       }
     }
   }
-  If (KeepSettings = "0")
+  If (KeepSettings = "0" or Unattended = "1")
   {
     Loop %regdel0%
     {
@@ -344,10 +349,36 @@ Else If 1 = appstart
   EnvSet USERPROFILE, %U3_APP_DATA_PATH%
   EnvSet HOMEPATH, %U3_APP_DATA_PATH%
   EnvSet APPDATA, %U3_APP_DATA_PATH%\Application Data
+  
+  ; add custom PATH directories
+  EnvGet ePATH, PATH
+  IniGetKeys("envdir", INIFile, "EnvPath")
+  Loop %envdir0%
+  {
+    CurPath := envdir%A_Index%
+    StringReplace CurPath, CurPath, % "%ALLUSERSPROFILE%", %eALLUSERSPROFILE%, A
+    StringReplace CurPath, CurPath, % "%APPDATA%", %eAPPDATA%, A
+    StringReplace CurPath, CurPath, % "%CommonProgramFiles%", %eCommonProgramFiles%, A
+    StringReplace CurPath, CurPath, % "%HOMEPATH%", %eHOMEPATH%, A
+    StringReplace CurPath, CurPath, % "%ProgramFiles%", %eProgramFiles%, A
+    StringReplace CurPath, CurPath, % "%SystemRoot%", %eSystemRoot%, A
+    StringReplace CurPath, CurPath, % "%USERPROFILE%", %eUSERPROFILE%, A
+    StringReplace CurPath, CurPath, % "%WINDIR%", %ewindir%, A
+    StringReplace CurPath, CurPath, % "%TEMP%", %eTEMP%, A
+    StringReplace CurPath, CurPath, % "%U3_APP_DATA_PATH%", %U3_APP_DATA_PATH%, A
+    StringReplace CurPath, CurPath, % "%U3_DEVICE_DOCUMENT_PATH%", %U3_DEVICE_DOCUMENT_PATH%, A
+    StringReplace CurPath, CurPath, % "%U3_DEVICE_EXEC_PATH%", %U3_DEVICE_EXEC_PATH%, A
+    StringReplace CurPath, CurPath, % "%U3_HOST_EXEC_PATH%", %U3_HOST_EXEC_PATH%, A
+    
+    ePATH := CurPath . ";" . ePATH
+  }
+  EnvSet PATH, %ePATH%
+  
   IfNotExist %APPDATA%
   {
     FileCreateDir %APPDATA%
   }
+  
   cmdl := AppExe
   Loop %0%
   {
@@ -364,8 +395,10 @@ Else If 1 = appstop
   
   ToolTip Closing %AppName% ...
   
+  SplitPath AppExe, AppFile, null, null, null, null
+  
   TryClose:
-  Process Exist, %AppExe%
+  Process Exist, %AppFile%
   If ErrorLevel
     ProgPID = %ErrorLevel%
   Else
