@@ -242,13 +242,32 @@ Else If 1 = unconfig
       FileGetAttrib FilAttr, %U3_HOST_EXEC_PATH%\%CurFile%
       IfInString FilAttr, D
       {
-        Status("Saving data directory " . CurFile . " ...")
-        FileCopyDir %U3_HOST_EXEC_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%CurFile%, 1
+        IfExist %U3_HOST_EXEC_PATH%\%CurFile%
+        {
+          Status("Saving data directory " . CurFile . " ...")
+          FileCopyDir %U3_HOST_EXEC_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%CurFile%, 1
+        }
+        Else
+        {
+          ; Folder got deleted in the meantime, remove it from backup
+          Status("Removing data directory " . CurFile . " ...")
+          FileRemoveDir %U3_APP_DATA_PATH%\%CurFile%, 1
+        }
       }
       Else
       {
-        Status("Saving data file " . CurFile . " ...")
-        FileCopy %U3_HOST_EXEC_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%CurFile%, 1
+        IfExist %U3_HOST_EXEC_PATH%\%CurFile%
+        {
+          Status("Saving data file " . CurFile . " ...")
+          FileCopy %U3_HOST_EXEC_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%CurFile%, 1
+        }
+        Else
+        {
+          ; File got deleted in the meantime, remove it from backup
+          Status("Removing data file " . CurFile . " ...")
+          FileSetAttrib -RSH, %U3_APP_DATA_PATH%\%CurFile%
+          FileDelete %U3_APP_DATA_PATH%\%CurFile%
+        }
       }
     }
   }
