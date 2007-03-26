@@ -2,7 +2,7 @@
 #NoEnv
 #Include mb_IniTools.ahk
 #Include mb_TextTools.ahk
-U3HVer = 1.2
+U3HVer = 1.3
 
 EnvGet U3_DEVICE_SERIAL, U3_DEVICE_SERIAL                    ; serial number of device (copy protection)
 EnvGet U3_DEVICE_PATH, U3_DEVICE_PATH                        ; drive letter to device (F:)

@@ -83,6 +83,17 @@ Else
     {
       IfExist %U3_HOST_EXEC_PATH%\%CurFile%
       {
+        IfExist %U3_APP_DATA_PATH%\%CurFile%
+        {
+          FileGetSize FilSize1, %U3_HOST_EXEC_PATH%\%CurFile%
+          FileGetSize FilSize2, %U3_APP_DATA_PATH%\%CurFile%
+          FileGetTime FilStamp1, %U3_HOST_EXEC_PATH%\%CurFile%
+          FileGetTime FilStamp2, %U3_APP_DATA_PATH%\%CurFile%
+          if ((FilSize1 = FileSize2) and (FilStamp1 = FilStamp2)) {
+            ; Both versions are same size and same date/time - skip
+            Continue
+          }
+        }
         Status("Saving data file " . CurFile . " ...")
         FileCopy %U3_HOST_EXEC_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%CurFile%, 1
       }
