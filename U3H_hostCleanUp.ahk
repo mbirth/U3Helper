@@ -3,11 +3,11 @@
 ; ### hostCleanUp                                                        ###
 ; ###                                                                    ###
 ; ##########################################################################
-
+ 
 If (U3_IS_DEVICE_AVAILABLE <> "true")
 {
   ; U3 stick not plugged in!!
-  MsgBox 4112, U3 Device Not Available, Your U3 Device seems to be disconnected. The settings cannot be saved!`n`nAll your changes made since plugging in the U3 Device are likely to be lost. Try to manually save them now.`n`nAfter pressing OK, registry entries will be removed.
+  MsgBox 4112, U3 Device Not Available (%U3_IS_DEVICE_AVAILABLE%), Your U3 Device seems to be disconnected. The settings cannot be saved!`n`nAll your changes made since plugging in the U3 Device are likely to be lost. Try to manually save them now.`n`n%U3_HOST_EXEC_PATH%`n`nAfter pressing OK, registry entries will be removed.
 }
 Else
 {
@@ -61,6 +61,7 @@ Else
   }
 
   ;Copy data files
+  CopyErrors := ""
   Loop %datexe0%
   {
     CurFile := datexe%A_Index%
@@ -70,7 +71,14 @@ Else
       IfExist %U3_HOST_EXEC_PATH%\%CurFile%
       {
         Status("Saving data directory " . CurFile . " ...")
-        FileCopyDir %U3_HOST_EXEC_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%CurFile%, 1
+        SetWorkingDir %U3_HOST_EXEC_PATH%\%CurFile%
+        Loop *.*, 0, 1
+        {
+          FileCopyNewer(A_LoopFileLongPath, U3_APP_DATA_PATH . "\" CurFile . "\" . A_LoopFileFullPath)
+          If ErrorLevel
+            CopyErrors := CopyErrors . "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . "`n"
+        }
+        SetWorkingDir %A_ScriptDir%
       }
       Else
       {
@@ -83,19 +91,10 @@ Else
     {
       IfExist %U3_HOST_EXEC_PATH%\%CurFile%
       {
-        IfExist %U3_APP_DATA_PATH%\%CurFile%
-        {
-          FileGetSize FilSize1, %U3_HOST_EXEC_PATH%\%CurFile%
-          FileGetSize FilSize2, %U3_APP_DATA_PATH%\%CurFile%
-          FileGetTime FilStamp1, %U3_HOST_EXEC_PATH%\%CurFile%
-          FileGetTime FilStamp2, %U3_APP_DATA_PATH%\%CurFile%
-          if ((FilSize1 = FileSize2) and (FilStamp1 = FilStamp2)) {
-            ; Both versions are same size and same date/time - skip
-            Continue
-          }
-        }
         Status("Saving data file " . CurFile . " ...")
-        FileCopy %U3_HOST_EXEC_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%CurFile%, 1
+        FileCopyNewer(U3_HOST_EXEC_PATH . "\" . CurFile, U3_APP_DATA_PATH . "\" . CurFile)
+        If ErrorLevel
+          CopyErrors := CopyErrors . "File: " . CurFile . "`n"
       }
       Else
       {
@@ -106,6 +105,8 @@ Else
       }
     }
   }
+  If (CopyErrors <> "")
+    MsgBox 4112, Error while copying, Following files could not be backed up:`n`n%CopyErrors%`n`nTry to manually save them now.`n`n%U3_HOST_EXEC_PATH%`n`nAfter pressing OK, those files will be deleted.
 }
 
 IniRead KeepSettings, %INIFile%, U3Helper, KeepSettings, 0

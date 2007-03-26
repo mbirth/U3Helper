@@ -53,6 +53,34 @@ Status(msg)
   }
 }
 
+FileCopyNewer(srcf, dstf)
+{
+  IfNotExist %srcf%
+  {
+    ErrorLevel = 1
+    return false
+  }
+  IfExist %dstf%
+  {
+    FileGetSize FilSize1, %srcf%
+    FileGetSize FilSize2, %dstf%
+    FileGetTime FilStamp1, %srcf%
+    FileGetTime FilStamp2, %dstf%
+    if ((FilSize1 = FilSize2) and (FilStamp1 = FilStamp2)) {
+      ; Both versions are same size and same date/time - skip
+      ErrorLevel = 0
+      return true
+    }
+  }
+  FileCopy %srcf%, %dstf%, 1
+  If ErrorLevel
+  {
+    ErrorLevel = 2
+    return false
+  }
+  return true
+}
+
 IfExist %AppExe%
   Menu Tray, Icon, %AppExe%
 
