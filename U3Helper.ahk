@@ -2,7 +2,7 @@
 #NoEnv
 #Include mb_IniTools.ahk
 #Include mb_TextTools.ahk
-U3HVer = 1.3
+U3HVer = 1.4
 
 EnvGet U3_DEVICE_SERIAL, U3_DEVICE_SERIAL                    ; serial number of device (copy protection)
 EnvGet U3_DEVICE_PATH, U3_DEVICE_PATH                        ; drive letter to device (F:)
@@ -53,6 +53,16 @@ Status(msg)
   }
 }
 
+StrCopy(str, ct)
+{
+  res := ""
+  Loop %ct%
+  {
+    res .= str
+  }
+  return res
+}
+
 FileCopyNewer(srcf, dstf)
 {
   IfNotExist %srcf%
@@ -68,7 +78,7 @@ FileCopyNewer(srcf, dstf)
     FileGetTime FilStamp2, %dstf%
     if ((FilSize1 = FilSize2) and (FilStamp1 = FilStamp2)) {
       ; Both versions are same size and same date/time - skip
-      ErrorLevel = 0
+      ErrorLevel = -1
       return true
     }
   }
