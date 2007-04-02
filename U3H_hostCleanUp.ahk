@@ -26,7 +26,7 @@ Else
   {
     Loop %regbak0%
     {
-      Status("Translating paths in registry #" . A_Index . " " . StrCopy(".", A_Index))
+      Status("Translating paths in registry #" . A_Index . " of " . regbak0 . " ... " . Perc(A_Index-1, regbak0))
       CurBranch := regbak%A_Index%
       SplitFirst(RegRoot, RegSub, CurBranch, "\")
       Loop %RegRoot%, %RegSub%, 0, 1
@@ -55,7 +55,7 @@ Else
     Loop %regbak0%
     {
       CurBranch := regbak%A_Index%
-      Status("Saving registry settings #" . A_Index . " " . StrCopy(".", A_Index))
+      Status("Saving registry settings #" . A_Index . " of " . regbak0 . " ... " . Perc(A_Index-1, regbak0))
       RunWait regedit /E "%U3_APP_DATA_PATH%\regdata%A_Index%.reg" "%CurBranch%"
     }
   }
@@ -70,29 +70,41 @@ Else
     {
       IfExist %U3_HOST_EXEC_PATH%\%CurFile%
       {
-        StatDots := ""
+        Copied = 0
+        Skipped = 0
+        Errors = 0
+        OutIndex = %A_Index%
+        FileCount = 0
         SetWorkingDir %U3_HOST_EXEC_PATH%\%CurFile%
         Loop *.*, 0, 1
         {
-          Status("Saving data directory " . CurFile . " " . StatDots)
+          FileCount++
+        }
+        Loop *.*, 0, 1
+        {
+          Status("Saving data directory " . CurFile . " ... " . Perc(OutIndex-1+(A_Index/FileCount), datexe0) . " CPY:" . Copied . " (SKP:" . Skipped . " / ERR:" . Errors . ")")
           FileCopyNewer(A_LoopFileLongPath, U3_APP_DATA_PATH . "\" CurFile . "\" . A_LoopFileFullPath)
-          If ErrorLevel > 0
-            CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . "`n"
           If ErrorLevel = 2
-            StatDots .= "E"
+          {
+            CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (Error while copying)`n"
+            Errors++
+          }
           else if ErrorLevel = 1
-            StatDots .= "N"
+          {
+            CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (File does not exist)`n"
+            Errors++
+          }
           else if ErrorLevel = -1
-            StatDots .= "."
+            Skipped++
           else
-            StatDots .= ">"
+            Copied++
         }
         SetWorkingDir %A_ScriptDir%
       }
       Else
       {
         ; Folder got deleted in the meantime, remove it from backup
-        Status("Removing data directory " . CurFile . " ...")
+        Status("Removing data directory " . CurFile . " ... " . Perc(A_Index-1, datexe0))
         FileRemoveDir %U3_APP_DATA_PATH%\%CurFile%, 1
       }
     }
@@ -100,7 +112,7 @@ Else
     {
       IfExist %U3_HOST_EXEC_PATH%\%CurFile%
       {
-        Status("Saving data file " . CurFile . " ...")
+        Status("Saving data file " . CurFile . " ... " . Perc(A_Index-1, datexe0))
         FileCopyNewer(U3_HOST_EXEC_PATH . "\" . CurFile, U3_APP_DATA_PATH . "\" . CurFile)
         If ErrorLevel > 0
           CopyErrors .= "File: " . CurFile . "`n"
@@ -108,7 +120,7 @@ Else
       Else
       {
         ; File got deleted in the meantime, remove it from backup
-        Status("Removing data file " . CurFile . " ...")
+        Status("Removing data file " . CurFile . " ... " . Perc(A_Index-1, datexe0))
         FileSetAttrib -RSH, %U3_APP_DATA_PATH%\%CurFile%
         FileDelete %U3_APP_DATA_PATH%\%CurFile%
       }
@@ -143,13 +155,13 @@ If (KeepSettings = "0" or RevertSettings = "1")
 {
   Loop %regbak0%
   {
-    Status("Removing registry settings #" . A_Index . " from host system " . StrCopy(".", A_Index))
+    Status("Removing registry settings #" . A_Index . " from host system ... " . Perc(A_Index-1, regbak0))
     CurBranch := regbak%A_Index%
     SplitFirst(RegRoot, RegSub, CurBranch, "\")
     RegDelete %RegRoot%, %RegSub%
     If (RevertSettings = "1")
     {
-      Status("Restoring registry settings #" . A_Index . " from backup " . StrCopy(".", A_Index))
+      Status("Restoring registry settings #" . A_Index . " from backup ... " . Perc(A_Index-1, regbak0))
       RunWait regedit /S "%U3_HOST_EXEC_PATH%\U3Hregbak%A_Index%.reg"
     }
   }
@@ -158,7 +170,7 @@ If (KeepSettings = "0" or Unattended = "1")
 {
   Loop %regdel0%
   {
-    Status("Removing add. registry settings #" . A_Index . " from host system " . StrCopy(".", A_Index))
+    Status("Removing add. registry settings #" . A_Index . " from host system ... " . Perc(A_Index-1, regdel0))
     CurBranch := regdel%A_Index%
     SplitFirst(RegRoot, RegSub, CurBranch, "\")
     RegDelete %RegRoot%, %RegSub%
@@ -168,7 +180,7 @@ If (KeepSettings = "0" or Unattended = "1")
   Loop %regsvr0%
   {
     CurDLL := regsvr%A_Index%
-    Status("Unregistering file " . CurDLL . " " . StrCopy(".", A_Index))
+    Status("Unregistering file " . CurDLL . " ... " . Perc(A_Index-1, regsvr0))
     RunWait regsvr32 /S /U "%U3_HOST_EXEC_PATH%\%CurDLL%"
   }
   
@@ -191,12 +203,12 @@ If (KeepSettings = "0" or Unattended = "1")
     FileGetAttrib FilAttr, %CurFile%
     IfInString FilAttr, D
     {
-      Status("Removing directory #" . A_Index . " from host system " . StrCopy(".", A_Index))
+      Status("Removing directory #" . A_Index . " from host system ... " . Perc(A_Index-1, fildel0))
       FileRemoveDir %CurFile%, 1
     }
     Else
     {
-      Status("Removing file #" . A_Index . " from host system " . StrCopy(".", A_Index))
+      Status("Removing file #" . A_Index . " from host system ... " . Perc(A_Index-1, fildel0))
       FileDelete %CurFile%
     }
   }

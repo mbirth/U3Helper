@@ -20,9 +20,9 @@ Loop %regbak0%
   }
   If (keycount > 0)
   {
-    Status("Backing up registry settings #" . A_Index . " " . StrCopy(".", A_Index))
+    Status("Backing up registry settings #" . A_Index . " ... " . Perc(A_Index-1, regbak0))
     RunWait regedit /E "%U3_HOST_EXEC_PATH%\U3Hregbak%A_Index%.reg" "%CurBranch%"
-    Status("Cleaning registry settings #" . A_Index . " " . StrCopy(".", A_Index))
+    Status("Cleaning registry settings #" . A_Index . " ... " . Perc(A_Index-1, regbak0))
     RegDelete %RegRoot%, %RegSub%
   }
 }
@@ -45,7 +45,7 @@ If (ForeignSettings = "0")
 {
   Loop %regbak0%
   {
-    Status("Importing registry settings #" . A_Index . " " . StrCopy(".", A_Index))
+    Status("Importing registry settings #" . A_Index . " ... " . Perc(A_Index-1, regbak0))
     RunWait regedit /S "%U3_APP_DATA_PATH%\regdata%A_Index%.reg"
   }
   IfExist %U3_APP_DATA_PATH%\regdataX.reg
@@ -55,7 +55,7 @@ If (ForeignSettings = "0")
   }
   Loop %regbak0%
   {
-    Status("Translating paths in registry #" . A_Index . " " . StrCopy(".", A_Index))
+    Status("Translating paths in registry #" . A_Index . " ... " . Perc(A_Index-1, regbak0))
     CurBranch := regbak%A_Index%
     SplitFirst(RegRoot, RegSub, CurBranch, "\")
     Loop %RegRoot%, %RegSub%, 0, 1
@@ -91,12 +91,12 @@ Loop %datexe0%
   FileGetAttrib FilAttr, %U3_APP_DATA_PATH%\%CurFile%
   IfInString FilAttr, D
   {
-    Status("Copying data directory " . CurFile . " " . StrCopy(".", A_Index))
+    Status("Copying data directory " . CurFile . " ... " . Perc(A_Index-1, datexe0))
     FileCopyDir %U3_APP_DATA_PATH%\%CurFile%, %U3_HOST_EXEC_PATH%\%CurFile%, 1
   }
   Else
   {
-    Status("Copying data file " . CurFile . " " . StrCopy(".", A_Index))
+    Status("Copying data file " . CurFile . " ... " . Perc(A_Index-1, datexe0))
     FileCopy %U3_APP_DATA_PATH%\%CurFile%, %U3_HOST_EXEC_PATH%\%CurFile%, 1
   }
 }
@@ -108,7 +108,7 @@ If (KeepSettings = "0")
   Loop %regsvr0%
   {
     CurDLL := regsvr%A_Index%
-    Status("Registering file " . CurDLL . " " . StrCopy(".", A_Index))
+    Status("Registering file " . CurDLL . " ... " . Perc(A_Index-1, regsvr0))
     RunWait regsvr32 /S "%U3_HOST_EXEC_PATH%\%CurDLL%"
   }
 }

@@ -40,6 +40,24 @@ IniGetKeys("regbak", INIFile, "RegBackup")
 IniGetKeys("regdel", INIFile, "RegDelete")
 IniGetKeys("fildel", INIFile, "FileDelete")
 
+Perc(pos, all)
+{
+  perc := Floor(pos*100//all)
+  str = %perc%
+  str .= "% ["
+  lc := perc//10
+  Loop %lc%
+  {
+    str .= "|"
+  }
+  Loop % (109-perc)//10
+  {
+    str .= "."
+  }
+  str .= "]"
+  return str
+}
+
 Status(msg)
 {
   global AppName
@@ -51,16 +69,6 @@ Status(msg)
   {
     ToolTip
   }
-}
-
-StrCopy(str, ct)
-{
-  res := ""
-  Loop %ct%
-  {
-    res .= str
-  }
-  return res
 }
 
 FileCopyNewer(srcf, dstf)
