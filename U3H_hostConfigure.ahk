@@ -4,10 +4,22 @@
 ; ###                                                                    ###
 ; ##########################################################################
 
-Menu Tray, Icon
-TrayTip Preparing %AppName% ..., U3Helper %U3HVer%`n(c)2006 Markus Birth`nmbirth@webwriters.de, 3, 1
+StepsAll = 0
+If regsvr0 > 0
+  StepsAll++
+If datexe0 > 0
+  StepsAll++
+If regbak0 > 0
+  StepsAll += 3
+IfExist %U3_APP_DATA_PATH%\regdataX.reg
+  StepsAll++
+StepsStep := 100/StepsAll
+StepsPos = 0
 
-Status("Checking registry settings...")
+Progress b2 x%PL% y%PT% w%PW% m FM%PFM% FS%PFS%, U3Helper %U3HVer% - (c)2006-2007 Markus Birth <mbirth@webwriters.de>, Preparing %AppName% ..., AHKProgress-%AppName%
+WinSet Transparent, %PTrans%, AHKProgress-%AppName%
+
+Progress, , Checking registry settings...
 keycount = 0
 ;Registry stuff
 Loop %regbak0%
@@ -20,16 +32,19 @@ Loop %regbak0%
   }
   If (keycount > 0)
   {
-    Status("Backing up registry settings #" . A_Index . " ... " . Perc(A_Index-1, regbak0))
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regbak0, Backing up registry settings #%A_Index% ...
     RunWait regedit /E "%U3_HOST_EXEC_PATH%\U3Hregbak%A_Index%.reg" "%CurBranch%"
-    Status("Cleaning registry settings #" . A_Index . " ... " . Perc(A_Index-1, regbak0))
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/regbak0, Cleaning registry settings #%A_Index% ...
     RegDelete %RegRoot%, %RegSub%
   }
 }
 
+If regbak0 > 0
+  StepsPos++
+
 If (keycount > 0)
 {
-  Status("")
+  Progress % StepsPos*StepsStep, Registry settings found!
   IniWrite 1, %INIFile%, U3Helper, KeepSettings
   If (Unattended = "0")
   {
@@ -37,6 +52,7 @@ If (keycount > 0)
     IfMsgBox Yes
     {
       IniWrite 1, %INIFile%, U3Helper, ForeignSettings
+      StepsPos += 2
     }
   }
 }
@@ -45,17 +61,20 @@ If (ForeignSettings = "0")
 {
   Loop %regbak0%
   {
-    Status("Importing registry settings #" . A_Index . " ... " . Perc(A_Index-1, regbak0))
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regbak0, Importing registry settings #%A_Index% ...
     RunWait regedit /S "%U3_APP_DATA_PATH%\regdata%A_Index%.reg"
   }
+  If regbak0 > 0
+    StepsPos++
   IfExist %U3_APP_DATA_PATH%\regdataX.reg
   {
-    Status("Importing special registry settings ...")
+    Progress % StepsPos*StepsStep, Importing special registry settings ...
     RunWait regedit /S "%U3_APP_DATA_PATH%\regdataX.reg"
+    StepsPos++
   }
   Loop %regbak0%
   {
-    Status("Translating paths in registry #" . A_Index . " ... " . Perc(A_Index-1, regbak0))
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regbak0, Translating paths in registry #%A_Index% ...
     CurBranch := regbak%A_Index%
     SplitFirst(RegRoot, RegSub, CurBranch, "\")
     Loop %RegRoot%, %RegSub%, 0, 1
@@ -82,7 +101,10 @@ If (ForeignSettings = "0")
       }
     }
   }
+  If regbak0 > 0
+    StepsPos++
 }
+
 
 ;Copy data files
 Loop %datexe0%
@@ -91,15 +113,40 @@ Loop %datexe0%
   FileGetAttrib FilAttr, %U3_APP_DATA_PATH%\%CurFile%
   IfInString FilAttr, D
   {
-    Status("Copying data directory " . CurFile . " ... " . Perc(A_Index-1, datexe0))
-    FileCopyDir %U3_APP_DATA_PATH%\%CurFile%, %U3_HOST_EXEC_PATH%\%CurFile%, 1
+    Copied = 0
+    Errors = 0
+    OutIndex = %A_Index%
+    FileCount = 0
+    SetWorkingDir %U3_APP_DATA_PATH%\%CurFile%
+    Loop *.*, 0, 1
+    {
+      FileCount++
+    }
+    IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%
+      FileCreateDir %U3_HOST_EXEC_PATH%\%CurFile%
+    Loop *.*, 0, 1
+    {
+      Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Copying data directory %CurFile% ... (CPY:%Copied% / ERR:%Errors%)
+      IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileDir%
+        FileCreateDir %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileDir%
+      FileCopy %A_LoopFileLongPath%, %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%, 1
+      If ErrorLevel
+        Errors++
+      Else
+        Copied++
+    }
+    SetWorkingDir %A_ScriptDir%
+    ; FileCopyDir %U3_APP_DATA_PATH%\%CurFile%, %U3_HOST_EXEC_PATH%\%CurFile%, 1
   }
   Else
   {
-    Status("Copying data file " . CurFile . " ... " . Perc(A_Index-1, datexe0))
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Copying data file %CurFile% ...
     FileCopy %U3_APP_DATA_PATH%\%CurFile%, %U3_HOST_EXEC_PATH%\%CurFile%, 1
   }
 }
+
+If datexe0 > 0
+  StepsPos++
 
 ; regsvr32 stuff
 IniRead KeepSettings, %INIFile%, U3Helper, KeepSettings, 0
@@ -108,8 +155,12 @@ If (KeepSettings = "0")
   Loop %regsvr0%
   {
     CurDLL := regsvr%A_Index%
-    Status("Registering file " . CurDLL . " ... " . Perc(A_Index-1, regsvr0))
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regsvr0, Registering file %CurDLL% ...
     RunWait regsvr32 /S "%U3_HOST_EXEC_PATH%\%CurDLL%"
   }
 }
-Status("")
+
+If regsvr0 > 0
+  StepsPos++
+
+Progress 100, hostConfigure done.

@@ -2,7 +2,7 @@
 #NoEnv
 #Include mb_IniTools.ahk
 #Include mb_TextTools.ahk
-U3HVer = 1.4
+U3HVer = 1.6
 
 EnvGet U3_DEVICE_SERIAL, U3_DEVICE_SERIAL                    ; serial number of device (copy protection)
 EnvGet U3_DEVICE_PATH, U3_DEVICE_PATH                        ; drive letter to device (F:)
@@ -40,35 +40,36 @@ IniGetKeys("regbak", INIFile, "RegBackup")
 IniGetKeys("regdel", INIFile, "RegDelete")
 IniGetKeys("fildel", INIFile, "FileDelete")
 
-Perc(pos, all)
-{
-  perc := Floor(pos*100//all)
-  str = %perc%
-  str .= "% ["
-  lc := perc//10
-  Loop %lc%
-  {
-    str .= "|"
-  }
-  Loop % (109-perc)//10
-  {
-    str .= "."
-  }
-  str .= "]"
-  return str
-}
+WinGetPos,Tx,Ty,Tw,Th,ahk_class Shell_TrayWnd,,,
+; Tw>Th: horizontal taskbar (top or bottom)
+; Tw<Th: vertical taskbar (left or right)
+; Tx=0 and Ty=0: top or left
+; Tx>0: right
+; Ty>0: bottom
+PT := 0
+PL := 0
+PH := 78
+PW := 400
+PFM := 10
+PFS := 8
+PTrans := 204
 
-Status(msg)
-{
-  global AppName
-  if (StrLen(msg) > 0)
-  {
-    ToolTip %AppName%`n%msg%
-  }
-  Else
-  {
-    ToolTip
-  }
+if (Tw>Th and Ty<=0) {
+  ;taskbar top
+  PL := A_ScreenWidth - PW
+  PT := Ty + Th
+} else if (Tw>Th and Ty>0) {
+  ;taskbar bottom
+  PL := A_ScreenWidth - PW
+  PT := Ty - PH
+} else if (Tw<Th and Ty=0) {
+  ;taskbar left
+  PL := Tx + Tw
+  PT := A_ScreenHeight - PH
+} else if (Tw<Th and Ty>0) {
+  ;taskbar right
+  PL := Tx - PW
+  PT := A_ScreenHeight - PH
 }
 
 FileCopyNewer(srcf, dstf)

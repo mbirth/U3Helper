@@ -4,10 +4,33 @@
 ; ###                                                                    ###
 ; ##########################################################################
  
+StepsAll = 0
+If regsvr0 > 0
+  StepsAll++
+If datexe0 > 0
+  StepsAll++
+If regbak0 > 0
+  StepsAll += 2
+IfExist %U3_APP_DATA_PATH%\regdataX.reg
+  StepsAll++
+If regdel0 > 0
+  StepsAll++
+If fildel0 > 0
+  StepsAll++
+StepsStep := 100/StepsAll
+StepsPos = 0
+
+Progress b2 x%PL% y%PT% w%PW% m FM%PFM% FS%PFS%, U3Helper %U3HVer% - (c)2006-2007 Markus Birth <mbirth@webwriters.de>, Cleaning up %AppName% ..., AHKProgress-%AppName%
+WinSet Transparent, %PTrans%, AHKProgress-%AppName%
+
 If (U3_IS_DEVICE_AVAILABLE <> "true")
 {
   ; U3 stick not plugged in!!
   MsgBox 4112, U3 Device Not Available (%U3_IS_DEVICE_AVAILABLE%), Your U3 Device seems to be disconnected. The settings cannot be saved!`n`nAll your changes made since plugging in the U3 Device are likely to be lost. Try to manually save them now.`n`n%U3_HOST_EXEC_PATH%`n`nAfter pressing OK, registry entries will be removed.
+  If regbak0 > 0
+    StepsPos++
+  If datexe0 > 0
+    StepsPos++
 }
 Else
 {
@@ -26,7 +49,7 @@ Else
   {
     Loop %regbak0%
     {
-      Status("Translating paths in registry #" . A_Index . " of " . regbak0 . " ... " . Perc(A_Index-1, regbak0))
+      Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regbak0, Translating paths in registry #%A_Index% ...
       CurBranch := regbak%A_Index%
       SplitFirst(RegRoot, RegSub, CurBranch, "\")
       Loop %RegRoot%, %RegSub%, 0, 1
@@ -51,14 +74,13 @@ Else
           }
         }
       }
-    }
-    Loop %regbak0%
-    {
-      CurBranch := regbak%A_Index%
-      Status("Saving registry settings #" . A_Index . " of " . regbak0 . " ... " . Perc(A_Index-1, regbak0))
+      Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regbak0, Saving registry settings #%A_Index% ...
       RunWait regedit /E "%U3_APP_DATA_PATH%\regdata%A_Index%.reg" "%CurBranch%"
     }
   }
+  
+  If regbak0 > 0
+    StepsPos++
 
   ;Copy data files
   CopyErrors := ""
@@ -82,7 +104,7 @@ Else
         }
         Loop *.*, 0, 1
         {
-          Status("Saving data directory " . CurFile . " ... " . Perc(OutIndex-1+(A_Index/FileCount), datexe0) . " CPY:" . Copied . " (SKP:" . Skipped . " / ERR:" . Errors . ")")
+          Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Saving data directory %CurFile% ... (CPY:%Copied% / SKP:%Skipped% / ERR:%Errors%)
           FileCopyNewer(A_LoopFileLongPath, U3_APP_DATA_PATH . "\" CurFile . "\" . A_LoopFileFullPath)
           If ErrorLevel = 2
           {
@@ -104,7 +126,7 @@ Else
       Else
       {
         ; Folder got deleted in the meantime, remove it from backup
-        Status("Removing data directory " . CurFile . " ... " . Perc(A_Index-1, datexe0))
+        Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Removing data directory %CurFile% ...
         FileRemoveDir %U3_APP_DATA_PATH%\%CurFile%, 1
       }
     }
@@ -112,7 +134,7 @@ Else
     {
       IfExist %U3_HOST_EXEC_PATH%\%CurFile%
       {
-        Status("Saving data file " . CurFile . " ... " . Perc(A_Index-1, datexe0))
+        Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Saving data file %CurFile% ...
         FileCopyNewer(U3_HOST_EXEC_PATH . "\" . CurFile, U3_APP_DATA_PATH . "\" . CurFile)
         If ErrorLevel > 0
           CopyErrors .= "File: " . CurFile . "`n"
@@ -120,14 +142,18 @@ Else
       Else
       {
         ; File got deleted in the meantime, remove it from backup
-        Status("Removing data file " . CurFile . " ... " . Perc(A_Index-1, datexe0))
+        Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Removing data file %CurFile% ...
         FileSetAttrib -RSH, %U3_APP_DATA_PATH%\%CurFile%
         FileDelete %U3_APP_DATA_PATH%\%CurFile%
       }
     }
   }
+
   If (CopyErrors <> "")
     MsgBox 4112, Error while copying, Following files could not be backed up:`n`n%CopyErrors%`n`nTry to manually save them now.`n`n%U3_HOST_EXEC_PATH%`n`nAfter pressing OK, those files will be deleted.
+
+  If datexe0 > 0
+    StepsPos++
 }
 
 IniRead KeepSettings, %INIFile%, U3Helper, KeepSettings, 0
@@ -155,34 +181,44 @@ If (KeepSettings = "0" or RevertSettings = "1")
 {
   Loop %regbak0%
   {
-    Status("Removing registry settings #" . A_Index . " from host system ... " . Perc(A_Index-1, regbak0))
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regbak0, Removing registry settings #%A_Index% from host ...
     CurBranch := regbak%A_Index%
     SplitFirst(RegRoot, RegSub, CurBranch, "\")
     RegDelete %RegRoot%, %RegSub%
     If (RevertSettings = "1")
     {
-      Status("Restoring registry settings #" . A_Index . " from backup ... " . Perc(A_Index-1, regbak0))
+      Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/regbak0, Restoring registry settings #%A_Index% from backup ...
       RunWait regedit /S "%U3_HOST_EXEC_PATH%\U3Hregbak%A_Index%.reg"
     }
   }
 }
+
+If regbak0 > 0
+  StepsPos++
+  
 If (KeepSettings = "0" or Unattended = "1")
 {
   Loop %regdel0%
   {
-    Status("Removing add. registry settings #" . A_Index . " from host system ... " . Perc(A_Index-1, regdel0))
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regdel0, Removing add. registry settings #%A_Index% from host ...
     CurBranch := regdel%A_Index%
     SplitFirst(RegRoot, RegSub, CurBranch, "\")
     RegDelete %RegRoot%, %RegSub%
   }
+  
+  If regdel0 > 0
+    StepsPos++
 
   ; regsvr32 stuff
   Loop %regsvr0%
   {
     CurDLL := regsvr%A_Index%
-    Status("Unregistering file " . CurDLL . " ... " . Perc(A_Index-1, regsvr0))
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regsvr0, Unregistering file %CurDLL% ...
     RunWait regsvr32 /S /U "%U3_HOST_EXEC_PATH%\%CurDLL%"
   }
+  
+  If regsvr0 > 0
+    StepsPos++
   
   ; remove files
   Loop %fildel0%
@@ -203,18 +239,31 @@ If (KeepSettings = "0" or Unattended = "1")
     FileGetAttrib FilAttr, %CurFile%
     IfInString FilAttr, D
     {
-      Status("Removing directory #" . A_Index . " from host system ... " . Perc(A_Index-1, fildel0))
+      Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/fildel0, Removing directory #%A_Index% from host ...
       FileRemoveDir %CurFile%, 1
     }
     Else
     {
-      Status("Removing file #" . A_Index . " from host system ... " . Perc(A_Index-1, fildel0))
+      Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/fildel0, Removing file #%A_Index% from host ...
       FileDelete %CurFile%
     }
   }
+  
+  If fildel0 > 0
+    StepsPos++
+}
+Else
+{
+  If regdel0 > 0
+    StepsPos++
+  If regsvr0 > 0
+    StepsPos++
+  If fildel0 > 0
+    StepsPos++
 }
 
-Status("")
+Progress 100, hostCleanUp done.
+
 If (U3_IS_DEVICE_AVAILABLE = "true")
 {
   IniDelete %INIFile%, U3Helper, ForeignSettings
