@@ -5,6 +5,8 @@
 ; ##########################################################################
  
 StepsAll = 0
+If (StrLen(RunBeforeEject) > 0)
+  StepsAll++
 If regsvr0 > 0
   StepsAll++
 If datexe0 > 0
@@ -22,6 +24,14 @@ StepsPos = 0
 
 Progress b2 x%PL% y%PT% w%PW% m FM%PFM% FS%PFS%, U3Helper %U3HVer% - (c)2006-2007 Markus Birth <mbirth@webwriters.de>, Cleaning up %AppName% ..., AHKProgress-%AppName%
 WinSet Transparent, %PTrans%, AHKProgress-%AppName%
+
+If (StrLen(RunBeforeEject) > 0)
+{
+  Progress % StepsPos*StepsStep, Running shutdown command ...
+  RunBeforeEject := EnvParseStr(RunBeforeEject)
+  RunWait %RunBeforeEject%
+  StepsPos++
+}
 
 If (U3_IS_DEVICE_AVAILABLE <> "true")
 {
@@ -57,17 +67,7 @@ Else
         If (A_LoopRegType = "REG_SZ" or A_LoopRegType = "REG_EXPAND_SZ" or A_LoopRegType = "REG_MULTI_SZ")
         {
           RegRead RegValue
-          StringReplace NewRegValue, RegValue, %U3_HOST_EXEC_PATH%, % "%U3_HOST_EXEC_PATH%", A
-          StringReplace NewRegValue, NewRegValue, %U3_APP_DATA_PATH%, % "%U3_APP_DATA_PATH%", A
-          StringReplace NewRegValue, NewRegValue, %U3_DEVICE_EXEC_PATH%, % "%U3_DEVICE_EXEC_PATH%", A
-          StringReplace NewRegValue, NewRegValue, %U3_DEVICE_DOCUMENT_PATH%, % "%U3_DEVICE_DOCUMENT_PATH%", A
-          StringReplace NewRegValue, NewRegValue, %eTEMP%, % "%TEMP%", A
-          StringReplace NewRegValue, NewRegValue, %eSystemRoot%, % "%SystemRoot%", A
-          StringReplace NewRegValue, NewRegValue, %eAPPDATA%, % "%APPDATA%", A
-          StringReplace NewRegValue, NewRegValue, %eUSERPROFILE%, % "%USERPROFILE%", A
-          StringReplace NewRegValue, NewRegValue, %eALLUSERSPROFILE%, % "%ALLUSERSPROFILE%", A
-          StringReplace NewRegValue, NewRegValue, %eCommonProgramFiles%, % "%CommonProgramFiles%", A
-          StringReplace NewRegValue, NewRegValue, %eProgramFiles%, % "%ProgramFiles%", A
+          NewRegValue := EnvUnparseStr(RegValue)
           If (NewRegValue <> RegValue)
           {
             RegWrite %NewRegValue%
@@ -224,18 +224,7 @@ If (KeepSettings = "0" or Unattended = "1")
   Loop %fildel0%
   {
     CurFile := fildel%A_Index%
-    StringReplace CurFile, CurFile, % "%ALLUSERSPROFILE%", %eALLUSERSPROFILE%, A
-    StringReplace CurFile, CurFile, % "%APPDATA%", %eAPPDATA%, A
-    StringReplace CurFile, CurFile, % "%CommonProgramFiles%", %eCommonProgramFiles%, A
-    StringReplace CurFile, CurFile, % "%HOMEPATH%", %eHOMEPATH%, A
-    StringReplace CurFile, CurFile, % "%ProgramFiles%", %eProgramFiles%, A
-    StringReplace CurFile, CurFile, % "%SystemRoot%", %eSystemRoot%, A
-    StringReplace CurFile, CurFile, % "%USERPROFILE%", %eUSERPROFILE%, A
-    StringReplace CurFile, CurFile, % "%WINDIR%", %ewindir%, A
-    StringReplace CurFile, CurFile, % "%TEMP%", %eTEMP%, A
-    StringReplace CurFile, CurFile, % "%U3_APP_DATA_PATH%", %U3_APP_DATA_PATH%, A
-    StringReplace CurFile, CurFile, % "%U3_DEVICE_DOCUMENT_PATH%", %U3_DEVICE_DOCUMENT_PATH%, A
-    StringReplace CurFile, CurFile, % "%U3_DEVICE_EXEC_PATH%", %U3_DEVICE_EXEC_PATH%, A
+    CurFile := EnvParseStr(CurFile)
     FileGetAttrib FilAttr, %CurFile%
     IfInString FilAttr, D
     {

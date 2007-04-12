@@ -82,18 +82,7 @@ If (ForeignSettings = "0")
       If (A_LoopRegType = "REG_SZ" or A_LoopRegType = "REG_EXPAND_SZ" or A_LoopRegType = "REG_MULTI_SZ")
       {
         RegRead RegValue
-        StringReplace NewRegValue, RegValue, % "%U3_HOST_EXEC_PATH%", %U3_HOST_EXEC_PATH%, A
-        StringReplace NewRegValue, NewRegValue, % "%U3_APP_DATA_PATH%", %U3_APP_DATA_PATH%, A
-        StringReplace NewRegValue, NewRegValue, % "%U3_DEVICE_EXEC_PATH%", %U3_DEVICE_EXEC_PATH%, A
-        StringReplace NewRegValue, NewRegValue, % "%U3_DEVICE_DOCUMENT_PATH%", %U3_DEVICE_DOCUMENT_PATH%, A
-        StringReplace NewRegValue, NewRegValue, % "%TEMP%", %eTEMP%, A
-        StringReplace NewRegValue, NewRegValue, % "%SystemRoot%", %eSystemRoot%, A
-        StringReplace NewRegValue, NewRegValue, % "%WINDIR%", %ewindir%, A
-        StringReplace NewRegValue, NewRegValue, % "%APPDATA%", %eAPPDATA%, A
-        StringReplace NewRegValue, NewRegValue, % "%USERPROFILE%", %eUSERPROFILE%, A
-        StringReplace NewRegValue, NewRegValue, % "%ALLUSERSPROFILE%", %eALLUSERSPROFILE%, A
-        StringReplace NewRegValue, NewRegValue, % "%CommonProgramFiles%", %eCommonProgramFiles%, A
-        StringReplace NewRegValue, NewRegValue, % "%ProgramFiles%", %eProgramFiles%, A
+        NewRegValue := EnvParseStr(RegValue)
         If (NewRegValue <> RegValue)
         {
           RegWrite %NewRegValue%

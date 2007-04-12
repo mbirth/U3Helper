@@ -1,0 +1,24 @@
+EnvAdd("U3_DEVICE_SERIAL")                    ; serial number of device (copy protection)
+EnvAdd("U3_DEVICE_PATH")                      ; drive letter to device (F:)
+EnvAdd("U3_DEVICE_DOCUMENT_PATH")             ; path to documents (F:\Documents)
+EnvAdd("U3_DEVICE_VENDOR")                    ; vendor
+EnvAdd("U3_DEVICE_PRODUCT")                   ; product name string
+EnvAdd("U3_DEVICE_VENDOR_ID")                 ; vendor id (decimal!! 2284 = 0x08ec)
+EnvAdd("U3_APP_DATA_PATH")                    ; data path for app (on device)
+EnvAdd("U3_HOST_EXEC_PATH")                   ; path to exe on host
+EnvAdd("U3_DEVICE_EXEC_PATH")                 ; path to needed files on device
+EnvAdd("U3_ENV_VERSION")                      ; should be 1.0
+EnvAdd("U3_ENV_LANGUAGE")                     ; language id of LaunchPad
+EnvAdd("U3_IS_UPGRADE")                       ; can be "false" or "true"
+EnvAdd("U3_IS_DEVICE_AVAILABLE")              ; "true"/"false"
+EnvAdd("U3_IS_AUTORUN")                       ; is this an autorun-launch? "true"/"false"
+EnvAdd("U3_DAPI_CONNECT_STRING")              ; who needs this?
+EnvAdd("ALLUSERSPROFILE")                     ; C:\Documents and Settings\All Users
+EnvAdd("APPDATA")                             ; C:\Doc...\<username>\Application Data
+EnvAdd("CommonProgramFiles")                  ; C:\Program Files\Common Files
+EnvAdd("HOMEPATH")                            ; C:\Documents and Settings\<username>
+EnvAdd("ProgramFiles")                        ; C:\Program Files
+EnvAdd("SystemRoot")                          ; C:\WINDOWS
+EnvAdd("USERPROFILE")                         ; C:\Documents and Settings\<username>
+EnvAdd("TEMP")                                ; C:\DOCUME~1\<username8.3>\LOCALS~1\Temp
+EnvAdd("windir")                              ; C:\WINDOWS
