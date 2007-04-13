@@ -7,6 +7,8 @@
 StepsAll = 0
 If regsvr0 > 0
   StepsAll++
+If datini0 > 0
+  StepsAll++
 If datexe0 > 0
   StepsAll++
 If regbak0 > 0
@@ -94,6 +96,36 @@ If (ForeignSettings = "0")
     StepsPos++
 }
 
+;Translate paths in INI files
+Loop %datini0%
+{
+  Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datini0, Translating paths in file %CurFile% ...
+  CurFile := datini%A_Index%
+  TmpFile := "$$$" . CurFile
+  FileMove %U3_APP_DATA_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%TmpFile%, 1
+  Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/datini0, Translating paths in file %CurFile% ...
+  Loop Read, %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
+  {
+    IfNotInString A_LoopReadLine, =
+    {
+      ; no key/value-pair --- skip processing
+      FileAppend %A_LoopReadLine%`n
+      Continue
+    }
+    IfNotInString A_LoopReadLine, `%
+    {
+      ; no envvars to replace --- skip processing
+      FileAppend %A_LoopReadLine%`n
+      Continue
+    }
+    SplitFirst(IKey, IVal, A_LoopReadLine, "=")
+    FileAppend % IKey . "=" . EnvParseStr(IVal) . "`n"
+  }
+  FileDelete %U3_APP_DATA_PATH%\%TmpFile%
+}
+
+If datini0 > 0
+  StepsPos++
 
 ;Copy data files
 Loop %datexe0%

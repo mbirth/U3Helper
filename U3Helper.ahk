@@ -3,7 +3,7 @@
 #Include mb_EnvTools.ahk
 #Include mb_IniTools.ahk
 #Include mb_TextTools.ahk
-U3HVer = 1.7
+U3HVer = 1.8
 
 SplitPath A_ScriptFullPath, null, ScrDir, null, ScrFile, ScrDrive
 INIFile = %ScrDir%\%ScrFile%.ini
@@ -14,6 +14,7 @@ IniRead RunBeforeStop, %INIFile%, U3Helper, RunBeforeStop, %A_Space%
 IniRead RunBeforeEject, %INIFile%, U3Helper, RunBeforeEject, %A_Space%
 IniGetKeys("regsvr", INIFile, "regsvr32")
 IniGetKeys("datexe", INIFile, "DataToExecDir")
+IniGetKeys("datini", INIFile, "ParseIniFiles")
 IniGetKeys("regbak", INIFile, "RegBackup")
 IniGetKeys("regdel", INIFile, "RegDelete")
 IniGetKeys("fildel", INIFile, "FileDelete")
@@ -21,6 +22,8 @@ IniGetKeys("fildel", INIFile, "FileDelete")
 U3_APP_DATA_PATH := EnvValue("U3_APP_DATA_PATH")
 U3_HOST_EXEC_PATH := EnvValue("U3_HOST_EXEC_PATH")
 U3_DEVICE_EXEC_PATH := EnvValue("U3_DEVICE_EXEC_PATH")
+EnvGet U3_IS_DEVICE_AVAILABLE, U3_IS_DEVICE_AVAILABLE
+EnvGet U3_IS_AUTORUN, U3_IS_AUTORUN
 
 WinGetPos,Tx,Ty,Tw,Th,ahk_class Shell_TrayWnd,,,
 ; Tw>Th: horizontal taskbar (top or bottom)
