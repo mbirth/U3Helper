@@ -101,27 +101,31 @@ Loop %datini0%
 {
   Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datini0, Translating paths in file %CurFile% ...
   CurFile := datini%A_Index%
-  TmpFile := "$$$" . CurFile
-  FileMove %U3_APP_DATA_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%TmpFile%, 1
-  Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/datini0, Translating paths in file %CurFile% ...
-  Loop Read, %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
+  IfExist %U3_APP_DATA_PATH%\%CurFile%
   {
-    IfNotInString A_LoopReadLine, =
+    TmpFile := "$$$" . CurFile
+    FileMove %U3_APP_DATA_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%TmpFile%, 1
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/datini0, Translating paths in file %CurFile% ...
+    Loop Read, %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
     {
-      ; no key/value-pair --- skip processing
+      IfNotInString A_LoopReadLine, =
+      {
+        ; no key/value-pair --- skip processing
       FileAppend %A_LoopReadLine%`n
-      Continue
-    }
-    IfNotInString A_LoopReadLine, `%
-    {
-      ; no envvars to replace --- skip processing
-      FileAppend %A_LoopReadLine%`n
-      Continue
-    }
-    SplitFirst(IKey, IVal, A_LoopReadLine, "=")
-    FileAppend % IKey . "=" . EnvParseStr(IVal) . "`n"
+        Continue
+      }
+      IfNotInString A_LoopReadLine, `%
+      {
+        ; no envvars to replace --- skip processing
+        FileAppend %A_LoopReadLine%`n
+        Continue
+      }
+      SplitFirst(IKey, IVal, A_LoopReadLine, "=")
+      FileAppend % IKey . "=" . EnvParseStr(IVal) . "`n"
+  
   }
-  FileDelete %U3_APP_DATA_PATH%\%TmpFile%
+    FileDelete %U3_APP_DATA_PATH%\%TmpFile%
+  }
 }
 
 If datini0 > 0

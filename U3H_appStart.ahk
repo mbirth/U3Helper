@@ -30,3 +30,4 @@ Loop %0%
 }
 OnExit ASOnExit
 RunWait %cmdl%
+OnExit

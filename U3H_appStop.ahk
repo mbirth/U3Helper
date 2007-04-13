@@ -6,7 +6,7 @@ If (StrLen(RunBeforeStop) > 0)
 StepsStep := 100/StepsAll
 StepsPos = 0
 
-Progress b2 x%PL% y%PT% w%PW% m FM%PFM% FS%PFS%, U3Helper %U3HVer% - (c)2006-2007 Markus Birth <mbirth@webwriters.de>, Cleaning up %AppName% ..., AHKProgress-%AppName%
+Progress b2 x%PL% y%PT% w%PW% m FM%PFM% FS%PFS%, U3Helper %U3HVer% - (c)2006-2007 Markus Birth <mbirth@webwriters.de>, Stopping %AppName% ..., AHKProgress-%AppName%
 WinSet Transparent, %PTrans%, AHKProgress-%AppName%
 
 If (StrLen(RunBeforeStop) > 0)
@@ -41,3 +41,4 @@ Goto TryClose
 
 CloseDone:
 Progress 100, appStop done.
+ExitApp
