@@ -11,7 +11,7 @@ inside the <appStart> - such as:
 BUT: If you app DOES store some stuff inside %USERPROFILE% (mostly noticeable if there appears something under
      C:\Documents and Settings\<Username>\Application Data\<somewhat>\<something>), call it as follows:
 
-  <appStart workingdir="%U3_APP_DATA_PATH%" cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstart</appStart>
+  <appStart cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">appstart</appStart>
 
 This way, the environment variables %USERPROFILE% and a bunch of other related will be set to point to the
 data directory on the U3-stick and therefore those app will store its data there instead of on the host system.
@@ -25,3 +25,4 @@ format.
 U3Helper Forum: http://vanilla.birth-online.de/3/
 U3Helper English info: http://www.autohotkey.com/forum/topic11839.html
 U3Helper German info: http://blog.birth-online.de/archives/164-Programme-U3-faehig-machen.html
+U3Helper Bugtracker: http://mantis.birth-online.de/set_project.php?project_id=5

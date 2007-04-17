@@ -3,10 +3,19 @@
 #Include mb_EnvTools.ahk
 #Include mb_IniTools.ahk
 #Include mb_TextTools.ahk
-U3HVer = 1.8
+U3HVer = 2.0
+
+U3_APP_DATA_PATH := EnvValue("U3_APP_DATA_PATH")
+U3_HOST_EXEC_PATH := EnvValue("U3_HOST_EXEC_PATH")
+U3_DEVICE_EXEC_PATH := EnvValue("U3_DEVICE_EXEC_PATH")
+EnvGet U3_IS_DEVICE_AVAILABLE, U3_IS_DEVICE_AVAILABLE
+EnvGet U3_IS_AUTORUN, U3_IS_AUTORUN
 
 SplitPath A_ScriptFullPath, null, ScrDir, null, ScrFile, ScrDrive
 INIFile = %ScrDir%\%ScrFile%.ini
+If (StrLen(U3_HOST_EXEC_PATH) > 0)
+  INIFile = %U3_HOST_EXEC_PATH%\%ScrFile%.ini
+
 IniRead AppName, %INIFile%, U3Helper, AppName, unknown
 IniRead AppExe, %INIFile%, U3Helper, AppExe, cmd.exe
 IniRead Unattended, %INIFile%, U3Helper, Unattended, 0
@@ -18,12 +27,6 @@ IniGetKeys("datini", INIFile, "ParseIniFiles")
 IniGetKeys("regbak", INIFile, "RegBackup")
 IniGetKeys("regdel", INIFile, "RegDelete")
 IniGetKeys("fildel", INIFile, "FileDelete")
-
-U3_APP_DATA_PATH := EnvValue("U3_APP_DATA_PATH")
-U3_HOST_EXEC_PATH := EnvValue("U3_HOST_EXEC_PATH")
-U3_DEVICE_EXEC_PATH := EnvValue("U3_DEVICE_EXEC_PATH")
-EnvGet U3_IS_DEVICE_AVAILABLE, U3_IS_DEVICE_AVAILABLE
-EnvGet U3_IS_AUTORUN, U3_IS_AUTORUN
 
 WinGetPos,Tx,Ty,Tw,Th,ahk_class Shell_TrayWnd,,,
 ; Tw>Th: horizontal taskbar (top or bottom)
@@ -76,6 +79,10 @@ FileCopyNewer(srcf, dstf)
       return true
     }
   }
+  SplitPath dstf, oFn, oDir, oExt, oName, oDrive
+  IfNotExist %oDir%
+    FileCreateDir %oDir%
+  
   FileCopy %srcf%, %dstf%, 1
   If ErrorLevel
   {
@@ -106,6 +113,6 @@ Else If 1 = appstop
 }
 Else
 {
-  MsgBox 48, U3Helper %U3HVer%, No parameter given.`n`nSee http://www.autohotkey.com/forum/topic11839.html for info.`n`n(c)2006-2007 Markus Birth <mbirth@webwriters.de>
+  MsgBox 48, U3Helper %U3HVer% - About, This is the U3Helper tool for making applications U3-Smart. It cannot be directly started.`n`nNo parameter given.`n`nSee http://www.autohotkey.com/forum/topic11839.html for info.`n`n(c)2006-2007 Markus Birth <mbirth@webwriters.de>
   MsgBox 64, U3Helper %U3HVer% - Debug info, % EnvList(), 30
 }

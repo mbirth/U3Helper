@@ -20,6 +20,7 @@ IfNotExist %APPDATA%
   FileCreateDir %APPDATA%
 }
 
+SetWorkingDir %U3_HOST_EXEC_PATH%
 cmdl := AppExe
 Loop %0%
 {
