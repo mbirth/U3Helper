@@ -143,6 +143,8 @@ Else
       {
         ; Folder got deleted in the meantime, remove it from backup
         Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Removing data directory %CurFile% ...
+        FileSetAttrib -RSH, %U3_APP_DATA_PATH%\%CurFile%
+        FileSetAttrib -RSH, %U3_APP_DATA_PATH%\%CurFile%\*.*, 1, 1
         FileRemoveDir %U3_APP_DATA_PATH%\%CurFile%, 1
       }
     }
@@ -200,6 +202,8 @@ Else
             FileGetAttrib FAttr, %A_LoopFileLongPath%
             IfInString FAttr, D
             {
+              FileSetAttrib -RSH, %A_LoopFileLongPath%
+              FileSetAttrib -RSH, %A_LoopFileLongPath%\*.*, 1, 1
               FileRemoveDir %A_LoopFileLongPath%, 1
               If ErrorLevel
                 Errors++
@@ -208,6 +212,7 @@ Else
             }
             Else
             {
+              FileSetAttrib -RSH, %A_LoopFileLongPath%
               FileDelete %A_LoopFileLongPath%
               If ErrorLevel
                 Errors++
