@@ -12,7 +12,7 @@ If regsvr0 > 0
 If datini0 > 0
   StepsAll++
 If datexe0 > 0
-  StepsAll++
+  StepsAll += 2
 If regbak0 > 0
   StepsAll += 2
 IfExist %U3_APP_DATA_PATH%\regdataX.reg
@@ -92,6 +92,7 @@ Else
     FileGetAttrib FilAttr, %U3_HOST_EXEC_PATH%\%CurFile%
     IfInString FilAttr, D
     {
+      ; CurFile is a directory
       IfExist %U3_HOST_EXEC_PATH%\%CurFile%
       {
         Copied = 0
@@ -147,6 +148,7 @@ Else
     }
     Else
     {
+      ; CurFile is a file
       IfExist %U3_HOST_EXEC_PATH%\%CurFile%
       {
         Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Saving data file %CurFile% ...
@@ -167,6 +169,63 @@ Else
   If (CopyErrors <> "")
     MsgBox 4112, Error while copying, Following files could not be backed up:`n`n%CopyErrors%`n`nTry to manually save them now.`n`n%U3_HOST_EXEC_PATH%`n`nAfter pressing OK, those files will be deleted.
 
+  If datexe0 > 0
+    StepsPos++
+
+  Loop %datexe0%
+  {
+    CurFile := datexe%A_Index%
+    FileGetAttrib FilAttr, %U3_APP_DATA_PATH%\%CurFile%
+    IfInString FilAttr, D
+    {
+      ; CurFile is a directory
+      IfExist %U3_APP_DATA_PATH%\%CurFile%
+      {
+        Deleted = 0
+        Skipped = 0
+        Errors = 0
+        OutIndex = %A_Index%
+        FileCount = 0
+        SetWorkingDir %U3_APP_DATA_PATH%\%CurFile%
+        Loop *.*, 1, 1
+        {
+          FileCount++
+        }
+        Loop *.*, 1, 1
+        {
+          Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Cleaning data directory %CurFile% ... (DEL:%Deleted% / SKP:%Skipped% / ERR:%Errors%)
+          IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%
+          {
+            ; file doesn't exist on host, also delete on U3 drive
+            FileGetAttrib FAttr, %A_LoopFileLongPath%
+            IfInString FAttr, D
+            {
+              FileRemoveDir %A_LoopFileLongPath%, 1
+              If ErrorLevel
+                Errors++
+              Else
+                Deleted++
+            }
+            Else
+            {
+              FileDelete %A_LoopFileLongPath%
+              If ErrorLevel
+                Errors++
+              Else
+                Deleted++
+            }
+          }
+          Else
+          {
+            ; file still exists on host, leave it also on U3 drive
+            Skipped++
+          }
+        }
+        SetWorkingDir %A_ScriptDir%
+      }
+    }    
+  }
+  
   If datexe0 > 0
     StepsPos++
 
