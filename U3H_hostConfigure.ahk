@@ -5,6 +5,8 @@
 ; ##########################################################################
 
 StepsAll = 0
+IfNotExist %U3_HOST_EXEC_PATH%\%A_ScriptName%
+  StepsAll++
 If regsvr0 > 0
   StepsAll++
 If datini0 > 0
@@ -21,7 +23,15 @@ StepsPos = 0
 Progress b2 x%PL% y%PT% w%PW% m FM%PFM% FS%PFS%, U3Helper %U3HVer% - (c)2006-2007 Markus Birth <mbirth@webwriters.de>, Preparing %AppName% ..., AHKProgress-%AppName%
 WinSet Transparent, %PTrans%, AHKProgress-%AppName%
 
-Progress, , Checking registry settings...
+; made following step not to display b/c it occurs only once on the first launch of any U3H-app
+IfNotExist %U3_HOST_EXEC_PATH%\%A_ScriptName%
+{
+  Progress % StepsPos*StepsStep, Copying U3Helper to disk...
+  FileCopy %A_ScriptFullPath%, %U3_HOST_EXEC_PATH%\%A_ScriptName%, 0
+  StepsPos++
+}
+
+Progress % StepsPos*StepsStep, Checking registry settings...
 keycount = 0
 ;Registry stuff
 Loop %regbak0%
@@ -143,18 +153,27 @@ Loop %datexe0%
     OutIndex = %A_Index%
     FileCount = 0
     SetWorkingDir %U3_APP_DATA_PATH%\%CurFile%
-    Loop *.*, 0, 1
+    Loop *.*, 1, 1
     {
       FileCount++
     }
     IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%
       FileCreateDir %U3_HOST_EXEC_PATH%\%CurFile%
-    Loop *.*, 0, 1
+    Loop *.*, 1, 1
     {
       Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Copying data directory %CurFile% ... (CPY:%Copied% / ERR:%Errors%)
-      IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileDir%
-        FileCreateDir %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileDir%
-      FileCopy %A_LoopFileLongPath%, %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%, 1
+      FileGetAttrib FAttr, %A_LoopFileLongPath%
+      IfInString FAttr, D
+      {
+        IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%
+          FileCreateDir %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%
+      }
+      Else
+      {
+        IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileDir%
+          FileCreateDir %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileDir%
+        FileCopy %A_LoopFileLongPath%, %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%, 1
+      }
       If ErrorLevel
         Errors++
       Else

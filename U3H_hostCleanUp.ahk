@@ -100,28 +100,41 @@ Else
         OutIndex = %A_Index%
         FileCount = 0
         SetWorkingDir %U3_HOST_EXEC_PATH%\%CurFile%
-        Loop *.*, 0, 1
+        Loop *.*, 1, 1
         {
           FileCount++
         }
-        Loop *.*, 0, 1
+        Loop *.*, 1, 1
         {
           Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Saving data directory %CurFile% ... (CPY:%Copied% / SKP:%Skipped% / ERR:%Errors%)
-          FileCopyNewer(A_LoopFileLongPath, U3_APP_DATA_PATH . "\" CurFile . "\" . A_LoopFileFullPath)
-          If ErrorLevel = 2
+          FileGetAttrib FAttr, %A_LoopFileLongPath%
+          IfInString FAttr, D
           {
-            CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (Error while copying)`n"
-            Errors++
+            IfNotExist %U3_APP_DATA_PATH%\%CurFile%\%A_LoopFileFullPath%
+              FileCreateDir %U3_APP_DATA_PATH%\%CurFile%\%A_LoopFileFullPath%
+            If ErrorLevel
+              Errors++
+            Else
+              Copied++
           }
-          else if ErrorLevel = 1
+          Else
           {
-            CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (File does not exist)`n"
-            Errors++
+            FileCopyNewer(A_LoopFileLongPath, U3_APP_DATA_PATH . "\" CurFile . "\" . A_LoopFileFullPath)
+            If ErrorLevel = 2
+            {
+              CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (Error while copying)`n"
+              Errors++
+            }
+            else if ErrorLevel = 1
+            {
+              CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (File does not exist)`n"
+              Errors++
+            }
+            else if ErrorLevel = -1
+              Skipped++
+            else
+              Copied++
           }
-          else if ErrorLevel = -1
-            Skipped++
-          else
-            Copied++
         }
         SetWorkingDir %A_ScriptDir%
       }
