@@ -3,7 +3,7 @@
 #Include mb_EnvTools.ahk
 #Include mb_IniTools.ahk
 #Include mb_TextTools.ahk
-U3HVer = 2.1
+U3HVer = 2.2
 U3HUUID = 0f90f88c-5e05-4cab-8c3a-e1c0112b06fd
 
 U3_APP_DATA_PATH := EnvValue("U3_APP_DATA_PATH")
@@ -28,6 +28,10 @@ IniGetKeys("datini", INIFile, "ParseIniFiles")
 IniGetKeys("regbak", INIFile, "RegBackup")
 IniGetKeys("regdel", INIFile, "RegDelete")
 IniGetKeys("fildel", INIFile, "FileDelete")
+
+;******************************************************************************
+;** Get Taskbar position
+;******************************************************************************
 
 WinGetPos,Tx,Ty,Tw,Th,ahk_class Shell_TrayWnd,,,
 ; Tw>Th: horizontal taskbar (top or bottom)
@@ -60,6 +64,44 @@ if (Tw>Th and Ty<=0) {
   PL := Tx - PW
   PT := A_ScreenHeight - PH
 }
+
+;******************************************************************************
+
+;******************************************************************************
+;** Get names in local language for "Application Data", "Local Settings" and
+;** "Application Data" below "Local Settings"
+;******************************************************************************
+
+RegRead AD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders, AppData
+RegRead LS, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders, Local Settings
+RegRead LAD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders, Local AppData
+
+If LAD
+  LAD := AD
+
+StringRight ADc, AD, 1
+StringRight LSc, LS, 1
+StringRight LADc, LAD, 1
+
+If (ADc = "\")
+  StringTrimRight AD, AD, 1
+
+If (LSc = "\")
+  StringTrimRight LS, LS, 1
+
+If (LADc = "\")
+  StringTrimRight LAD, LAD, 1
+
+SplitLast(null, ADn, AD, "\")
+SplitLast(null, LSn, LS, "\")
+SplitLast(null, LADn, LAD, "\")
+
+EnvAddX("U3H_AppData", ADn)
+EnvAddX("U3H_LocalSettings", LSn)
+EnvAddX("U3H_LocalAppData", LSn . "\" . LADn)
+EnvSort()
+
+;******************************************************************************
 
 FileCopyNewer(srcf, dstf)
 {

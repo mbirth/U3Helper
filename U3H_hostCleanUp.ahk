@@ -342,13 +342,14 @@ If (KeepSettings = "0" or Unattended = "1")
     IfInString FilAttr, D
     {
       Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/fildel0, Removing directory #%A_Index% from host ...
-      FileSetAttrib -rhs, %CurFile%
+      FileSetAttrib -RSH, %CurFile%
+      FileSetAttrib -RSH, %CurFile%\*.*, 1, 1
       FileRemoveDir %CurFile%, 1
     }
     Else
     {
       Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/fildel0, Removing file #%A_Index% from host ...
-      FileSetAttrib -rhs, %CurFile%
+      FileSetAttrib -RSH, %CurFile%
       FileDelete %CurFile%
     }
   }
