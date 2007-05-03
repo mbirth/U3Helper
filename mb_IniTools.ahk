@@ -5,10 +5,14 @@
 IniGetKeys(Result, IniFile, IniSection)
 {
   global
-  %Result%0 = 0
   local i, Inside, TrimLine, SectTest, cp, Key, Value
-  i = 1
-  Inside = 0
+  i := %Result%0 + 1
+  If (!i)
+  {
+    %Result%0 := 0
+    i := 1
+  }
+  Inside := 0
   Loop Read, %IniFile%
   {
     TrimLine = %A_LoopReadLine%

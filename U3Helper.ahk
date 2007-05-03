@@ -24,7 +24,8 @@ IniRead RunBeforeStop, %INIFile%, U3Helper, RunBeforeStop, %A_Space%
 IniRead RunBeforeEject, %INIFile%, U3Helper, RunBeforeEject, %A_Space%
 IniGetKeys("regsvr", INIFile, "regsvr32")
 IniGetKeys("datexe", INIFile, "DataToExecDir")
-IniGetKeys("datini", INIFile, "ParseIniFiles")
+IniGetKeys("dattxt", INIFile, "ParseFiles")
+IniGetKeys("dattxt", INIFile, "ParseIniFiles")   ; backward compatibility
 IniGetKeys("regbak", INIFile, "RegBackup")
 IniGetKeys("regdel", INIFile, "RegDelete")
 IniGetKeys("fildel", INIFile, "FileDelete")

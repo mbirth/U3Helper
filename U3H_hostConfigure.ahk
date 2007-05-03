@@ -9,7 +9,7 @@ IfNotExist %U3_HOST_EXEC_PATH%\%A_ScriptName%
   StepsAll++
 If regsvr0 > 0
   StepsAll++
-If datini0 > 0
+If dattxt0 > 0
   StepsAll++
 If datexe0 > 0
   StepsAll++
@@ -106,39 +106,40 @@ If (ForeignSettings = "0")
     StepsPos++
 }
 
-;Translate paths in INI files
-Loop %datini0%
+;Translate paths in text files
+Loop %dattxt0%
 {
-  Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datini0, Translating paths in file %CurFile% ...
-  CurFile := datini%A_Index%
+  Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/dattxt0, Translating paths in file %CurFile% ...
+  CurFile := dattxt%A_Index%
   IfExist %U3_APP_DATA_PATH%\%CurFile%
   {
     TmpFile := "$$$" . CurFile
     FileMove %U3_APP_DATA_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%TmpFile%, 1
-    Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/datini0, Translating paths in file %CurFile% ...
+    Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/dattxt0, Translating paths in file %CurFile% ...
     Loop Read, %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
     {
-      IfNotInString A_LoopReadLine, =
-      {
-        ; no key/value-pair --- skip processing
-      FileAppend %A_LoopReadLine%`n
-        Continue
-      }
       IfNotInString A_LoopReadLine, `%
       {
         ; no envvars to replace --- skip processing
         FileAppend %A_LoopReadLine%`n
         Continue
       }
-      SplitFirst(IKey, IVal, A_LoopReadLine, "=")
-      FileAppend % IKey . "=" . EnvParseStr(IVal) . "`n"
+      FileAppend % EnvParseStr(A_LoopReadLine) . "`n"
   
-  }
-    FileDelete %U3_APP_DATA_PATH%\%TmpFile%
+    }
+    IfExist %U3_APP_DATA_PATH%\%CurFile%
+    {
+      FileDelete %U3_APP_DATA_PATH%\%TmpFile%
+    }
+    Else
+    {
+      FileMove %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
+      MsgBox 4112, Error while translating, The datafile %CurFile% could not be translated. The original state has been restored (hopefully).
+    }
   }
 }
 
-If datini0 > 0
+If dattxt0 > 0
   StepsPos++
 
 ;Copy data files
