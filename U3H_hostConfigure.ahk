@@ -110,10 +110,12 @@ If (ForeignSettings = "0")
 Loop %dattxt0%
 {
   Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/dattxt0, Translating paths in file %CurFile% ...
-  CurFile := dattxt%A_Index%
-  IfExist %U3_APP_DATA_PATH%\%CurFile%
+  CurMask := dattxt%A_Index%
+  SetWorkingDir %U3_APP_DATA_PATH%
+  Loop %CurMask%
   {
-    TmpFile := "$$$" . CurFile
+    CurFile := A_LoopFileFullPath
+    TmpFile := A_LoopFileDir . "\$$$" . A_LoopFileName
     FileMove %U3_APP_DATA_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%TmpFile%, 1
     Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/dattxt0, Translating paths in file %CurFile% ...
     Loop Read, %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
@@ -137,6 +139,7 @@ Loop %dattxt0%
       MsgBox 4112, Error while translating, The datafile %CurFile% could not be translated. The original state has been restored (hopefully).
     }
   }
+  SetWorkingDir %A_ScriptDir%
 }
 
 If dattxt0 > 0

@@ -45,7 +45,7 @@ EnvSort()
     {
       CurNam := EnvVarsx%A_Index%
       CurVal := EnvValsx%A_Index%
-      If ((StrLen(CurVal) > MaxLen) and (StrLen(CurNam) > 0))
+      If ((StrLen(CurVal) > MaxLen) and (StrLen(CurNam) > 1))
       {
         MaxLen := StrLen(CurVal)
         MaxIndex := A_Index
