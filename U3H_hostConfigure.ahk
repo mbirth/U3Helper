@@ -31,6 +31,8 @@ IfNotExist %U3_HOST_EXEC_PATH%\%A_ScriptName%
   StepsPos++
 }
 
+;******************************************************************************
+
 Progress % StepsPos*StepsStep, Checking registry settings...
 keycount = 0
 ;Registry stuff
@@ -106,12 +108,14 @@ If (ForeignSettings = "0")
     StepsPos++
 }
 
+;******************************************************************************
+
 ;Translate paths in text files
+SetWorkingDir %U3_APP_DATA_PATH%
 Loop %dattxt0%
 {
   Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/dattxt0, Translating paths in file %CurFile% ...
   CurMask := dattxt%A_Index%
-  SetWorkingDir %U3_APP_DATA_PATH%
   Loop %CurMask%
   {
     CurFile := A_LoopFileFullPath
@@ -139,62 +143,62 @@ Loop %dattxt0%
       MsgBox 4112, Error while translating, The datafile %CurFile% could not be translated. The original state has been restored (hopefully).
     }
   }
-  SetWorkingDir %A_ScriptDir%
 }
+SetWorkingDir %A_ScriptDir%
 
 If dattxt0 > 0
   StepsPos++
 
+;******************************************************************************
+
 ;Copy data files
+SetWorkingDir %U3_APP_DATA_PATH%
 Loop %datexe0%
 {
-  CurFile := datexe%A_Index%
-  FileGetAttrib FilAttr, %U3_APP_DATA_PATH%\%CurFile%
-  IfInString FilAttr, D
+  OutIndex = %A_Index%
+  CurMask := datexe%A_Index%
+  Copied = 0
+  Errors = 0
+  Dirs = 0
+  
+  FileGetAttrib FAttr, %CurMask%
+  IfInString FAttr, D
+    CurMask .= "\*.*"
+  
+  FileCount = 0
+  Loop %CurMask%, 1, 1
   {
-    Copied = 0
-    Errors = 0
-    OutIndex = %A_Index%
-    FileCount = 0
-    SetWorkingDir %U3_APP_DATA_PATH%\%CurFile%
-    Loop *.*, 1, 1
+    FileCount++
+  }
+  Loop %CurMask%, 1, 1
+  {
+    CurFile := A_LoopFileFullPath
+    TargFile := U3_HOST_EXEC_PATH . "\" . CurFile
+    FileGetAttrib FAttr, %CurFile%
+    IfInString FAttr, D
     {
-      FileCount++
+      ; also create empty directories
+      Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Creating directory %CurFile% ... (CPY:%Copied% / DIR:%Dirs% / ERR:%Errors%)
+      FileCreateDir %TargFile%
+      Dirs++
     }
-    IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%
-      FileCreateDir %U3_HOST_EXEC_PATH%\%CurFile%
-    Loop *.*, 1, 1
+    Else 
     {
-      Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Copying data directory %CurFile% ... (CPY:%Copied% / ERR:%Errors%)
-      FileGetAttrib FAttr, %A_LoopFileLongPath%
-      IfInString FAttr, D
-      {
-        IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%
-          FileCreateDir %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%
-      }
-      Else
-      {
-        IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileDir%
-          FileCreateDir %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileDir%
-        FileCopy %A_LoopFileLongPath%, %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%, 1
-      }
-      If ErrorLevel
+      Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Copying data %CurFile% ... (CPY:%Copied% / DIR:%Dirs% / ERR:%Errors%)
+      FileCopyNewer(CurFile, TargFile)
+      If ErrorLevel > 0
         Errors++
       Else
         Copied++
     }
-    SetWorkingDir %A_ScriptDir%
-    ; FileCopyDir %U3_APP_DATA_PATH%\%CurFile%, %U3_HOST_EXEC_PATH%\%CurFile%, 1
-  }
-  Else
-  {
-    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Copying data file %CurFile% ...
-    FileCopy %U3_APP_DATA_PATH%\%CurFile%, %U3_HOST_EXEC_PATH%\%CurFile%, 1
   }
 }
+SetWorkingDir %A_ScriptDir%
 
 If datexe0 > 0
   StepsPos++
+
+;******************************************************************************
 
 ; regsvr32 stuff
 IniRead KeepSettings, %INIFile%, U3Helper, KeepSettings, 0
@@ -210,5 +214,7 @@ If (KeepSettings = "0")
 
 If regsvr0 > 0
   StepsPos++
+
+;******************************************************************************
 
 Progress 100, hostConfigure done.

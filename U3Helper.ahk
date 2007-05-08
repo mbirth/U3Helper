@@ -136,6 +136,8 @@ FileCopyNewer(srcf, dstf)
   return true
 }
 
+;******************************************************************************
+
 IfExist %AppExe%
   Menu Tray, Icon, %AppExe%
 

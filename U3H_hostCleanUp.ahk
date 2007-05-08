@@ -56,6 +56,9 @@ Else
       IniDelete %INIFile%, U3Helper, ForeignSettings
     }
   }
+
+  ;******************************************************************************
+
   IniRead ForeignSettings, %INIFile%, U3Helper, ForeignSettings, 0
   If (ForeignSettings = "0")
   {
@@ -84,89 +87,64 @@ Else
   If regbak0 > 0
     StepsPos++
 
+  ;******************************************************************************
+
   ;Copy data files
+  SetWorkingDir %U3_HOST_EXEC_PATH%
   CopyErrors := ""
   Loop %datexe0%
   {
-    CurFile := datexe%A_Index%
-    FileGetAttrib FilAttr, %U3_HOST_EXEC_PATH%\%CurFile%
-    IfInString FilAttr, D
+    OutIndex = %A_Index%
+    CurMask := datexe%A_Index%
+    Copied = 0
+    Skipped = 0
+    Errors = 0
+    Dirs = 0
+    CopyErrors := ""
+
+    FileGetAttrib FAttr, %CurMask%
+    IfInString FAttr, D
+      CurMask .= "\*.*"
+
+    FileCount = 0
+    Loop %CurMask%, 1, 1
     {
-      ; CurFile is a directory
-      IfExist %U3_HOST_EXEC_PATH%\%CurFile%
-      {
-        Copied = 0
-        Skipped = 0
-        Errors = 0
-        OutIndex = %A_Index%
-        FileCount = 0
-        SetWorkingDir %U3_HOST_EXEC_PATH%\%CurFile%
-        Loop *.*, 1, 1
-        {
-          FileCount++
-        }
-        Loop *.*, 1, 1
-        {
-          Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Saving data directory %CurFile% ... (CPY:%Copied% / SKP:%Skipped% / ERR:%Errors%)
-          FileGetAttrib FAttr, %A_LoopFileLongPath%
-          IfInString FAttr, D
-          {
-            IfNotExist %U3_APP_DATA_PATH%\%CurFile%\%A_LoopFileFullPath%
-              FileCreateDir %U3_APP_DATA_PATH%\%CurFile%\%A_LoopFileFullPath%
-            If ErrorLevel
-              Errors++
-            Else
-              Copied++
-          }
-          Else
-          {
-            FileCopyNewer(A_LoopFileLongPath, U3_APP_DATA_PATH . "\" CurFile . "\" . A_LoopFileFullPath)
-            If ErrorLevel = 2
-            {
-              CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (Error while copying)`n"
-              Errors++
-            }
-            else if ErrorLevel = 1
-            {
-              CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (File does not exist)`n"
-              Errors++
-            }
-            else if ErrorLevel = -1
-              Skipped++
-            else
-              Copied++
-          }
-        }
-        SetWorkingDir %A_ScriptDir%
-      }
-      Else
-      {
-        ; Folder got deleted in the meantime, remove it from backup
-        Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Removing data directory %CurFile% ...
-        FileSetAttrib -RSH, %U3_APP_DATA_PATH%\%CurFile%
-        FileSetAttrib -RSH, %U3_APP_DATA_PATH%\%CurFile%\*.*, 1, 1
-        FileRemoveDir %U3_APP_DATA_PATH%\%CurFile%, 1
-      }
+      FileCount++
     }
-    Else
+    Loop %CurMask%, 1, 1
     {
-      ; CurFile is a file
-      IfExist %U3_HOST_EXEC_PATH%\%CurFile%
+      CurFile := A_LoopFileFullPath
+      TargFile := U3_APP_DATA_PATH . "\" . CurFile
+      FileGetAttrib FAttr, %CurFile%
+      IfInString FAttr, D
       {
-        Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Saving data file %CurFile% ...
-        FileCopyNewer(U3_HOST_EXEC_PATH . "\" . CurFile, U3_APP_DATA_PATH . "\" . CurFile)
-        If ErrorLevel > 0
-          CopyErrors .= "File: " . CurFile . "`n"
+        ; also create empty directories
+        Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Creating directory %CurFile% ... (CPY:%Copied% / DIR:%Dirs% / ERR:%Errors%)
+        FileCreateDir %TargFile%
+        Dirs++
       }
-      Else
+      Else 
       {
-        ; File got deleted in the meantime, remove it from backup
-        Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/datexe0, Removing data file %CurFile% ...
-        FileSetAttrib -RSH, %U3_APP_DATA_PATH%\%CurFile%
-        FileDelete %U3_APP_DATA_PATH%\%CurFile%
+        Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Copying data %CurFile% ... (CPY:%Copied% / DIR:%Dirs% / ERR:%Errors%)
+        FileCopyNewer(CurFile, TargFile)
+        If ErrorLevel = 2
+        {
+          CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (Error while copying)`n"
+          Errors++
+        }
+        Else If ErrorLevel = 1
+        {
+          CopyErrors .= "Dir-entry: " . CurFile . "\" . A_LoopFileFullPath . " (File does not exist)`n"
+          Errors++
+        }
+        Else If ErrorLevel = -1
+          Skipped++
+        Else
+          Copied++
       }
     }
   }
+  SetWorkingDir %A_ScriptDir%
 
   If (CopyErrors <> "")
     MsgBox 4112, Error while copying, Following files could not be backed up:`n`n%CopyErrors%`n`nTry to manually save them now.`n`n%U3_HOST_EXEC_PATH%`n`nAfter pressing OK, those files will be deleted.
@@ -174,72 +152,75 @@ Else
   If datexe0 > 0
     StepsPos++
 
+  ;******************************************************************************
+  
+  ;Cleaning deleted files from stick
+  SetWorkingDir %U3_APP_DATA_PATH%
   Loop %datexe0%
   {
-    CurFile := datexe%A_Index%
-    FileGetAttrib FilAttr, %U3_APP_DATA_PATH%\%CurFile%
-    IfInString FilAttr, D
+    OutIndex = %A_Index%
+    CurMask := datexe%A_Index%
+    Deleted = 0
+    Skipped = 0
+    Errors = 0
+
+    FileGetAttrib FAttr, %CurMask%
+    IfInString FAttr, D
+      CurMask .= "\*.*"
+
+    FileCount = 0
+    Loop %CurMask%, 1, 1
     {
-      ; CurFile is a directory
-      IfExist %U3_APP_DATA_PATH%\%CurFile%
+      FileCount++
+    }
+    Loop %CurMask%, 1, 1
+    {
+      CurFile := A_LoopFileFullPath
+      Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Cleaning data %CurFile% ... (DEL:%Deleted% / SKP:%Skipped% / ERR:%Errors%)
+      TargFile := U3_HOST_EXEC_PATH . "\" . CurFile
+      IfExist %TargFile%
       {
-        Deleted = 0
-        Skipped = 0
-        Errors = 0
-        OutIndex = %A_Index%
-        FileCount = 0
-        SetWorkingDir %U3_APP_DATA_PATH%\%CurFile%
-        Loop *.*, 1, 1
-        {
-          FileCount++
-        }
-        Loop *.*, 1, 1
-        {
-          Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Cleaning data directory %CurFile% ... (DEL:%Deleted% / SKP:%Skipped% / ERR:%Errors%)
-          IfNotExist %U3_HOST_EXEC_PATH%\%CurFile%\%A_LoopFileFullPath%
-          {
-            ; file doesn't exist on host, also delete on U3 drive
-            FileGetAttrib FAttr, %A_LoopFileLongPath%
-            IfInString FAttr, D
-            {
-              FileSetAttrib -RSH, %A_LoopFileLongPath%
-              FileSetAttrib -RSH, %A_LoopFileLongPath%\*.*, 1, 1
-              FileRemoveDir %A_LoopFileLongPath%, 1
-              If ErrorLevel
-                Errors++
-              Else
-                Deleted++
-            }
-            Else
-            {
-              FileSetAttrib -RSH, %A_LoopFileLongPath%
-              FileDelete %A_LoopFileLongPath%
-              If ErrorLevel
-                Errors++
-              Else
-                Deleted++
-            }
-          }
-          Else
-          {
-            ; file still exists on host, leave it also on U3 drive
-            Skipped++
-          }
-        }
-        SetWorkingDir %A_ScriptDir%
+        ; file still exists on host
+        Skipped++
+        Continue
       }
-    }    
+      ; target directory or file doesn't exist anymore, delete on U3
+      FileSetAttrib -RSH, %CurFile%
+      FileGetAttrib FAttr, %CurFile%
+      IfInString FAttr, D
+      {
+        ; target is a directory
+        FileSetAttrib -RSH, %CurFile%\*.*, 1, 1
+        FileRemoveDir %CurFile%, 1
+        If ErrorLevel
+          Errors++
+        Else
+          Deleted++
+      }
+      Else
+      {
+        ; target is a single file only
+        FileDelete %CurFile%
+        If ErrorLevel
+          Errors++
+        Else
+          Deleted++
+      }
+    }
   }
+  SetWorkingDir %A_ScriptDir%
   
   If datexe0 > 0
     StepsPos++
 
+  ;******************************************************************************
+
   ;Translate paths in text files
+  SetWorkingDir %U3_APP_DATA_PATH%
   Loop %dattxt0%
   {
     Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/dattxt0, Translating paths in file %CurFile% ...
     CurMask := dattxt%A_Index%
-    SetWorkingDir %U3_APP_DATA_PATH%
     Loop %CurMask%
     {
       CurFile := A_LoopFileFullPath
@@ -266,12 +247,14 @@ Else
         MsgBox 4112, Error while translating, The datafile %CurFile% could not be translated. The original state has been restored (hopefully).
       }
     }
-    SetWorkingDir %A_ScriptDir%
   }
+  SetWorkingDir %A_ScriptDir%
 
   If dattxt0 > 0
     StepsPos++
 }
+
+;******************************************************************************
 
 IniRead KeepSettings, %INIFile%, U3Helper, KeepSettings, 0
 RevertSettings := "0"
@@ -313,8 +296,13 @@ If (KeepSettings = "0" or RevertSettings = "1")
 If regbak0 > 0
   StepsPos++
   
+;******************************************************************************
+
 If (KeepSettings = "0" or Unattended = "1")
 {
+
+  ;******************************************************************************
+
   Loop %regdel0%
   {
     Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regdel0, Removing add. registry settings #%A_Index% from host ...
@@ -325,6 +313,8 @@ If (KeepSettings = "0" or Unattended = "1")
   
   If regdel0 > 0
     StepsPos++
+
+  ;******************************************************************************
 
   ; regsvr32 stuff
   Loop %regsvr0%
@@ -337,29 +327,66 @@ If (KeepSettings = "0" or Unattended = "1")
   If regsvr0 > 0
     StepsPos++
   
+  ;******************************************************************************
+
   ; remove files
+  ; if not specified, all file operations run on A_ScriptDir which is U3_HOST_EXEC_PATH
   Loop %fildel0%
   {
-    CurFile := fildel%A_Index%
-    CurFile := EnvParseStr(CurFile)
-    FileGetAttrib FilAttr, %CurFile%
-    IfInString FilAttr, D
+    OutIndex = %A_Index%
+    CurMask := fildel%A_Index%
+    Deleted = 0
+    Errors = 0
+    Skipped = 0
+    
+    CurMask := EnvParseStr(CurFile)
+    FileGetAttrib FAttr, %CurMask%
+    IfInString FAttr, D
+      CurMask .= "\*.*"
+    
+    FileCount = 0
+    Loop %CurMask%, 1, 1
     {
-      Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/fildel0, Removing directory #%A_Index% from host ...
-      FileSetAttrib -RSH, %CurFile%
-      FileSetAttrib -RSH, %CurFile%\*.*, 1, 1
-      FileRemoveDir %CurFile%, 1
+      FileCount++
     }
-    Else
+    Loop %CurMask%, 1, 1
     {
-      Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/fildel0, Removing file #%A_Index% from host ...
+      CurFile := A_LoopFileFullPath
+      Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/fildel0, Removing data %CurFile% from host ... (DEL:%Deleted% / SKP:%Skipped% / ERR:%Errors%)
+      IfNotExist %CurFile%
+      {
+        Skipped++
+        Continue
+      }
       FileSetAttrib -RSH, %CurFile%
-      FileDelete %CurFile%
+      FileGetAttrib FAttr, %CurFile%
+      IfInString FAttr, D
+      {
+        ; target is a directory
+        FileSetAttrib -RSH, %CurFile%\*.*, 1, 1
+        FileRemoveDir %CurFile%, 1
+        If ErrorLevel
+          Errors++
+        Else
+          Deleted++
+      }
+      Else
+      {
+        ; target is a single file only
+        FileDelete %CurFile%
+        If ErrorLevel
+          Errors++
+        Else
+          Deleted++
+      }
     }
   }
   
   If fildel0 > 0
     StepsPos++
+
+  ;******************************************************************************
+
 }
 Else
 {
@@ -370,6 +397,8 @@ Else
   If fildel0 > 0
     StepsPos++
 }
+
+;******************************************************************************
 
 Progress 100, hostCleanUp done.
 
