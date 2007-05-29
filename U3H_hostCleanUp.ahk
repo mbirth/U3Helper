@@ -5,7 +5,7 @@
 ; ##########################################################################
  
 StepsAll = 0
-If (StrLen(RunBeforeEject) > 0)
+If runeje0 > 0
   StepsAll++
 If regsvr0 > 0
   StepsAll++
@@ -27,13 +27,15 @@ StepsPos = 0
 Progress b2 x%PL% y%PT% w%PW% m FM%PFM% FS%PFS%, U3Helper %U3HVer% - (c)2006-2007 Markus Birth <mbirth@webwriters.de>, Cleaning up %AppName% ..., AHKProgress-%AppName%
 WinSet Transparent, %PTrans%, AHKProgress-%AppName%
 
-If (StrLen(RunBeforeEject) > 0)
+Loop %runeje0%
 {
-  Progress % StepsPos*StepsStep, Running shutdown command ...
-  RunBeforeEject := EnvParseStr(RunBeforeEject)
-  RunWait %RunBeforeEject%
-  StepsPos++
+  CurCmd := runeje%A_Index%
+  Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/runeje0, Running shutdown command ... %CurCmd%
+  CurCmd := EnvParseStr(CurCmd)
+  RunWait %CurCmd%
 }
+If runeje0 > 0
+  StepsPos++
 
 If (U3_IS_DEVICE_AVAILABLE <> "true")
 {
@@ -100,7 +102,6 @@ Else
     Skipped = 0
     Errors = 0
     Dirs = 0
-    CopyErrors := ""
 
     FileGetAttrib FAttr, %CurMask%
     IfInString FAttr, D
@@ -119,13 +120,13 @@ Else
       IfInString FAttr, D
       {
         ; also create empty directories
-        Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Creating directory %CurFile% ... (CPY:%Copied% / DIR:%Dirs% / ERR:%Errors%)
+        Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Creating directory %CurFile% ... (CPY:%Copied% / DIR:%Dirs% / SKP:%Skipped% / ERR:%Errors%)
         FileCreateDir %TargFile%
         Dirs++
       }
       Else 
       {
-        Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Copying data %CurFile% ... (CPY:%Copied% / DIR:%Dirs% / ERR:%Errors%)
+        Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/datexe0, Copying data %CurFile% ... (CPY:%Copied% / DIR:%Dirs% / SKP:%Skipped% / ERR:%Errors%)
         FileCopyNewer(CurFile, TargFile)
         If ErrorLevel = 2
         {
@@ -217,16 +218,23 @@ Else
 
   ;Translate paths in text files
   SetWorkingDir %U3_APP_DATA_PATH%
+  TransErrors := ""
   Loop %dattxt0%
   {
-    Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/dattxt0, Translating paths in file %CurFile% ...
+    OutIndex = %A_Index%
     CurMask := dattxt%A_Index%
-    Loop %CurMask%
+      
+    FileCount = 0
+    Loop %CurMask%, 0, 0
+    {
+      FileCount++
+    }
+    Loop %CurMask%, 0, 0
     {
       CurFile := A_LoopFileFullPath
       TmpFile := A_LoopFileDir . "\$$$" . A_LoopFileName
       FileMove %U3_APP_DATA_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%TmpFile%, 1
-      Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/dattxt0, Translating paths in file %CurFile% ...
+      Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/dattxt0, Translating paths in file %CurFile% ...
       Loop Read, %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
       {
         IfNotInString A_LoopReadLine, \
@@ -244,11 +252,14 @@ Else
       Else
       {
         FileMove %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
-        MsgBox 4112, Error while translating, The datafile %CurFile% could not be translated. The original state has been restored (hopefully).
+        TransErrors .= "File: " . CurFile . " (Error while translating)`n"
       }
     }
   }
   SetWorkingDir %A_ScriptDir%
+
+  If (TransErrors <> "")
+    MsgBox 4112, Error while translating, Following files could not be translated:`n`n%TransErrors%`n`nThe original state has been restored (hopefully).
 
   If dattxt0 > 0
     StepsPos++
@@ -309,6 +320,11 @@ If (KeepSettings = "0" or Unattended = "1")
     CurBranch := regdel%A_Index%
     SplitFirst(RegRoot, RegSub, CurBranch, "\")
     RegDelete %RegRoot%, %RegSub%
+    If ErrorLevel
+    {
+      SplitLast(RegSub, RegKey, RegSub, "\")
+      RegDelete %RegRoot%, %RegSub%, %RegKey%
+    }
   }
   
   If regdel0 > 0

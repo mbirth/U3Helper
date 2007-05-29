@@ -20,15 +20,30 @@ If (StrLen(U3_HOST_EXEC_PATH) > 0)
 IniRead AppName, %INIFile%, U3Helper, AppName, unknown
 IniRead AppExe, %INIFile%, U3Helper, AppExe, cmd.exe
 IniRead Unattended, %INIFile%, U3Helper, Unattended, 0
-IniRead RunBeforeStop, %INIFile%, U3Helper, RunBeforeStop, %A_Space%
-IniRead RunBeforeEject, %INIFile%, U3Helper, RunBeforeEject, %A_Space%
+IniGetKeys("runcon", INIFile, "RunBeforeConfig")
+IniGetKeys("runsta", INIFile, "RunBeforeStart")
+IniGetKeys("runstp", INIFile, "RunBeforeStop")
+IniGetKeys("runeje", INIFile, "RunBeforeEject")
 IniGetKeys("regsvr", INIFile, "regsvr32")
 IniGetKeys("datexe", INIFile, "DataToExecDir")
 IniGetKeys("dattxt", INIFile, "ParseFiles")
-IniGetKeys("dattxt", INIFile, "ParseIniFiles")   ; backward compatibility
 IniGetKeys("regbak", INIFile, "RegBackup")
 IniGetKeys("regdel", INIFile, "RegDelete")
 IniGetKeys("fildel", INIFile, "FileDelete")
+; backward compatibility:
+IniGetKeys("dattxt", INIFile, "ParseIniFiles")   ; backward compatibility
+IniRead RunBeforeStop, %INIFile%, U3Helper, RunBeforeStop, %A_Space%
+IniRead RunBeforeEject, %INIFile%, U3Helper, RunBeforeEject, %A_Space%
+If (StrLen(RunBeforeStop) > 0)
+{
+  runstp0++
+  runstp%runstp0% := RunBeforeStop
+}
+If (StrLen(RunBeforeEject) > 0)
+{
+  runeje0++
+  runeje%runeje0% := RunBeforeEject
+}
 
 ;******************************************************************************
 ;** Get Taskbar position

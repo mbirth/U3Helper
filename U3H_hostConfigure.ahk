@@ -7,6 +7,8 @@
 StepsAll = 0
 IfNotExist %U3_HOST_EXEC_PATH%\%A_ScriptName%
   StepsAll++
+If runcon0 > 0
+  StepsAll++
 If regsvr0 > 0
   StepsAll++
 If dattxt0 > 0
@@ -23,7 +25,6 @@ StepsPos = 0
 Progress b2 x%PL% y%PT% w%PW% m FM%PFM% FS%PFS%, U3Helper %U3HVer% - (c)2006-2007 Markus Birth <mbirth@webwriters.de>, Preparing %AppName% ..., AHKProgress-%AppName%
 WinSet Transparent, %PTrans%, AHKProgress-%AppName%
 
-; made following step not to display b/c it occurs only once on the first launch of any U3H-app
 IfNotExist %U3_HOST_EXEC_PATH%\%A_ScriptName%
 {
   Progress % StepsPos*StepsStep, Copying U3Helper to disk...
@@ -32,6 +33,16 @@ IfNotExist %U3_HOST_EXEC_PATH%\%A_ScriptName%
 }
 
 ;******************************************************************************
+
+Loop %runcon0%
+{
+  CurCmd := runcon%A_Index%
+  Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/runcon0, Running config command ... %CurCmd%
+  CurCmd := EnvParseStr(CurCmd)
+  RunWait %CurCmd%
+}
+If runcon0 > 0
+  StepsPos++
 
 Progress % StepsPos*StepsStep, Checking registry settings...
 keycount = 0
@@ -112,16 +123,23 @@ If (ForeignSettings = "0")
 
 ;Translate paths in text files
 SetWorkingDir %U3_APP_DATA_PATH%
+TransErrors := ""
 Loop %dattxt0%
 {
-  Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/dattxt0, Translating paths in file %CurFile% ...
+  OutIndex = %A_Index%
   CurMask := dattxt%A_Index%
-  Loop %CurMask%
+  
+  FileCount = 0
+  Loop %CurMask%, 0, 0
+  {
+    FileCount++
+  }
+  Loop %CurMask%, 0, 0
   {
     CurFile := A_LoopFileFullPath
     TmpFile := A_LoopFileDir . "\$$$" . A_LoopFileName
     FileMove %U3_APP_DATA_PATH%\%CurFile%, %U3_APP_DATA_PATH%\%TmpFile%, 1
-    Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/dattxt0, Translating paths in file %CurFile% ...
+    Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/FileCount))/dattxt0, Translating paths in file %CurFile% ...
     Loop Read, %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
     {
       IfNotInString A_LoopReadLine, `%
@@ -140,11 +158,14 @@ Loop %dattxt0%
     Else
     {
       FileMove %U3_APP_DATA_PATH%\%TmpFile%, %U3_APP_DATA_PATH%\%CurFile%
-      MsgBox 4112, Error while translating, The datafile %CurFile% could not be translated. The original state has been restored (hopefully).
+      TransErrors .= "File: " . CurFile . " (Error while translating)`n"
     }
   }
 }
 SetWorkingDir %A_ScriptDir%
+
+If (TransErrors <> "")
+  MsgBox 4112, Error while translating, Following files could not be translated:`n`n%TransErrors%`n`nThe original state has been restored (hopefully).
 
 If dattxt0 > 0
   StepsPos++

@@ -45,7 +45,7 @@ EnvSort()
     {
       CurNam := EnvVarsx%A_Index%
       CurVal := EnvValsx%A_Index%
-      If ((StrLen(CurVal) > MaxLen) and (StrLen(CurNam) > 1))
+      If ((StrLen(CurVal) > MaxLen) and (StrLen(CurNam) > 0))
       {
         MaxLen := StrLen(CurVal)
         MaxIndex := A_Index
@@ -140,6 +140,8 @@ EnvUnparseStr(instring)
   {
     ReplFrom := EnvVals%A_Index%
     ReplTo := "%" . EnvVars%A_Index% . "%"
+    If (StrLen(ReplFrom) < 2) 
+      Continue
     StringReplace instring, instring, %ReplFrom%, %ReplTo%, A
   }
   return instring

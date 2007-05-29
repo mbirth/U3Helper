@@ -30,6 +30,14 @@ IfNotExist %U3_APP_DATA_PATH%\%LSn%\%LADn%
 }
 
 SetWorkingDir %U3_HOST_EXEC_PATH%
+
+Loop %runsta0%
+{
+  CurCmd := runsta%A_Index%
+  CurCmd := EnvParseStr(CurCmd)
+  RunWait %CurCmd%
+}
+
 cmdl := AppExe
 Loop %0%
 {
