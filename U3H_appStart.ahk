@@ -5,7 +5,7 @@ EnvGet eSystemDrive, SystemDrive
 StringReplace eHOMEPATH, U3_APP_DATA_PATH, %eSystemDrive%
 EnvSet HOMEPATH, %U3_APP_DATA_PATH%
 EnvSet HOMEDRIVE, % EnvValue("U3_DEVICE_PATH")
-EnvSet APPDATA, % U3_APP_DATA_PATH . "\" . ADn
+EnvSet APPDATA, % U3_APP_DATA_PATH . "\Application Data"
 
 ; add custom PATH directories
 EnvGet ePATH, PATH
