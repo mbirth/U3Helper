@@ -295,7 +295,7 @@ If (KeepSettings = "0" or RevertSettings = "1")
     Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regbak0, Removing registry settings #%A_Index% from host ...
     CurBranch := regbak%A_Index%
     SplitFirst(RegRoot, RegSub, CurBranch, "\")
-    RegDelete %RegRoot%, %RegSub%
+    RegDeleteX(RegRoot, RegSub)
     If (RevertSettings = "1")
     {
       Progress % StepsPos*StepsStep+StepsStep*(A_Index-0.5)/regbak0, Restoring registry settings #%A_Index% from backup ...
@@ -319,7 +319,7 @@ If (KeepSettings = "0" or Unattended = "1")
     Progress % StepsPos*StepsStep+StepsStep*(A_Index-1)/regdel0, Removing add. registry settings #%A_Index% from host ...
     CurBranch := regdel%A_Index%
     SplitFirst(RegRoot, RegSub, CurBranch, "\")
-    RegDelete %RegRoot%, %RegSub%
+    RegDeleteX(RegRoot, RegSub)
     If ErrorLevel
     {
       SplitLast(RegSub, RegKey, RegSub, "\")
