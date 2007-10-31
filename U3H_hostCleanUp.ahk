@@ -4,7 +4,9 @@
 ; ###                                                                    ###
 ; ##########################################################################
  
-StepsAll = 0
+KillTries = 10
+
+StepsAll = 1
 If runeje0 > 0
   StepsAll++
 If regsvr0 > 0
@@ -36,6 +38,65 @@ Loop %runeje0%
 }
 If runeje0 > 0
   StepsPos++
+
+Progress % StepsPos*StepsStep, Checking running processes ...
+
+EnumProcesses(procss)
+StringSplit procs, procss, |
+KillProcs0 = 0
+Loop %U3_HOST_EXEC_PATH%, 2
+  U3HEP := A_LoopFileLongPath
+Loop %U3_DEVICE_EXEC_PATH%, 2
+  U3DEP := A_LoopFileLongPath
+Loop %U3_APP_DATA_PATH%, 2
+  U3ADP := A_LoopFileLongPath
+Loop %A_ScriptFullPath%
+  ASFP := A_LoopFileLongPath
+Loop %procs0%
+{
+  CurProc := procs%A_Index%
+  CurFn := GetModuleFileNameEx(CurProc)
+  if (StrLen(CurFn) > 0)
+  {
+    Loop %CurFn%
+    {
+      CurFn := A_LoopFileLongPath
+      CurFnOnly := A_LoopFileName
+    }
+    if ( (CurFn <> ASFP) && ( (SubStr(CurFn, 1, StrLen(U3HEP)) = U3HEP) || (SubStr(CurFn, 1, StrLen(U3DEP)) = U3DEP) || (SubStr(CurFn, 1, StrLen(U3ADP)) = U3ADP) ) )
+    {
+      KillProcs0++
+      KillProcs%KillProcs0% := CurProc . "|" . CurFnOnly
+    }
+  }
+}
+Loop %KillProcs0%
+{
+  OutIndex = %A_Index%
+  CurProc := KillProcs%A_Index%
+  SplitFirst(CurPID, CurFn, CurProc, "|")
+
+  Loop %KillTries%
+  {
+    Process Exist, %CurPID%
+    If ErrorLevel
+      ProgPID = %ErrorLevel%
+    Else
+      Break
+
+    If (A_Index < KillTries-1)
+    {
+      Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/KillTries))/KillProcs0, Stopping process ... %CurFn% [%CurPID%]
+      WinClose ahk_pid %ProgPID%, , 0
+    }
+    Else
+    {
+      Progress % StepsPos*StepsStep+StepsStep*(OutIndex-1.00+(A_Index/KillTries))/KillProcs0, Killing process ... %CurFn% [%CurPID%]
+      Process Close, %ProgPID%
+    }
+  }
+}
+StepsPos++
 
 If (U3_IS_DEVICE_AVAILABLE <> "true")
 {

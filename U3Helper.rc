@@ -1,7 +1,7 @@
 
 1 VERSIONINFO
-FILEVERSION 2,3,0,0
-PRODUCTVERSION 2,3,0,0
+FILEVERSION 2,4,0,0
+PRODUCTVERSION 2,4,0,0
 FILEOS 0x4
 FILETYPE 0x1
 {
@@ -10,12 +10,12 @@ BLOCK "StringFileInfo"
 	BLOCK "040904b0"
 	{
 		VALUE "FileDescription", "U3Helper manages registry settings and data files of ordinary applications to make them U3-compatible. (see http://www.u3.com/ for more info)"
-		VALUE "FileVersion", "2, 3, 0, 0"
+		VALUE "FileVersion", "2, 4, 0, 0"
 		VALUE "InternalName", "U3H"
 		VALUE "LegalCopyright", "(c)2007 Markus Birth <mbirth@webwriters.de>"
 		VALUE "OriginalFilename", "U3Helper.exe"
 		VALUE "ProductName", "U3Helper"
-		VALUE "ProductVersion", "2, 3, 0, 0"
+		VALUE "ProductVersion", "2, 4, 0, 0"
 	}
 }
 
