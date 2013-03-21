@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="6873fef3-2000-44ff-81fa-f1a1aa0797a7" version="1.31.0.0325">
+    <icon>CCleaner.ico</icon>
+    <name>CCleaner</name>
+    <vendor url="http://www.ccleaner.com/">Piriform Ltd.</vendor>
+    <description>CCleaner is a freeware system optimization and privacy tool. It removes unused files from your system - allowing Windows to run faster and freeing up valuable hard disk space. It also cleans traces of your online activities such as your Internet history.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>2</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">config</hostConfigure>
+    <appStart workingdir="%U3_APP_DATA_PATH%" cmd="%U3_HOST_EXEC_PATH%\ccleaner.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

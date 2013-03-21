@@ -63,7 +63,7 @@ Loop %procs0%
       CurFn := A_LoopFileLongPath
       CurFnOnly := A_LoopFileName
     }
-    if ( (CurFn <> ASFP) && ( (SubStr(CurFn, 1, StrLen(U3HEP)) = U3HEP) || (SubStr(CurFn, 1, StrLen(U3DEP)) = U3DEP) || (SubStr(CurFn, 1, StrLen(U3ADP)) = U3ADP) ) )
+    if ( (CurFn <> ASFP) && ( (SubStr(CurFn, 1, StrLen(U3HEP)) = U3HEP) || ( (StrLen(U3DEP) > 0) && (SubStr(CurFn, 1, StrLen(U3DEP)) = U3DEP) ) || ( (StrLen(U3ADP) > 0) && (SubStr(CurFn, 1, StrLen(U3ADP)) = U3ADP) ) ) )
     {
       KillProcs0++
       KillProcs%KillProcs0% := CurProc . "|" . CurFnOnly
@@ -106,6 +106,8 @@ If (U3_IS_DEVICE_AVAILABLE <> "true")
     StepsPos++
   If datexe0 > 0
     StepsPos++
+  
+  ; Try to save to temporary directory ... maybe change U3_APP_DATA_PATH to new dir ... should work
 }
 Else
 {

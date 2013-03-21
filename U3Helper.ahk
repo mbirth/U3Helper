@@ -5,7 +5,7 @@
 #Include mb_ProcTools.ahk
 #Include mb_RegTools.ahk
 #Include mb_TextTools.ahk
-U3HVer = 2.4
+U3HVer = 2.41
 U3HUUID = 0f90f88c-5e05-4cab-8c3a-e1c0112b06fd
 
 U3_APP_DATA_PATH := EnvValue("U3_APP_DATA_PATH")
