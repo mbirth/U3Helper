@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="811be6b0-7ff9-45d7-ba7d-fdfc05a6951e" version="6.30.1.1">
+    <icon>uestudio.ico</icon>
+    <name>UEStudio</name>
+    <vendor url="http://www.ultraedit.com/">IDM Computer Solutions, Inc.</vendor>
+    <description>[U3Helper required] UEStudio is the powerful IDE built on the chassis of UltraEdit, the world renowned text editor.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>23.0</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart workingdir="%U3_APP_DATA_PATH%" cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstart</appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="be0cc0a2-2590-4fab-9588-367b1c863529" version="1.0.0.0">
+    <icon>nvu.ico</icon>
+    <name>Nvu</name>
+    <vendor url="http://www.nvu.com/">Linspire, Inc.</vendor>
+    <description>[U3Helper required] Finally! A complete Web Authoring System to rival programs like FrontPage and Dreamweaver. Nvu ("new view") makes managing a web site a snap. Now anyone can create web pages and manage a website with no technical expertise or knowledge of HTML.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>11.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstart</appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

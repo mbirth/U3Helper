@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="8b56ee48-adb7-43bf-a98e-6d5720e71b1f" version="4.3.2.1">
+    <icon>SyncBackSE.ico</icon>
+    <name>SyncBackSE</name>
+    <vendor url="http://www.2brightsparks.com/syncback/sbse.html">2BrightSparks</vendor>
+    <description>[U3Helper required] (cracked by pHrOzEn HeLL) Whether you're a beginner or advanced user, at home or work, SyncBackSE ensures your most valuable asset, data, remains protected.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>7.0</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\SyncBackSE.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

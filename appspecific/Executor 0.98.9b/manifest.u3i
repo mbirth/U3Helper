@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="91b0f8b7-779e-425d-8e86-7e1c6634da67" version="0.9.8.9">
+    <icon>Executor.ico</icon>
+    <name>Executor</name>
+    <vendor url="http://www.executor.dk/">Martin Bresson</vendor>
+    <description>[U3Helper required] This is launcher and a more powerful and customizable version of windows run.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>1.6</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\Executor.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

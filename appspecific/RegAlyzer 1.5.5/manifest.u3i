@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="b0b0b8ed-8c33-417a-a2e0-bdbacac30647" version="1.5.5.0">
+    <icon>RegAlyzer.ico</icon>
+    <name>RegAlyzer</name>
+    <vendor url="http://www.safer-networking.org/">Patrick M. Kolla</vendor>
+    <description>[U3Helper required] A tool to browse and change the registry. It was created because of a few features we missed in the original regedit tool.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>1.1</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\RegAlyzer.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="896D642C-7125-44F0-AC49-A23ABF82209C" version="3.0.116.0">
+    <icon>cdbxp.ico</icon>
+    <name>CDBurnerXP Pro 3</name>
+    <vendor url="http://www.cdburnerxp.se/">Stefan Haglund, Fredrik Haglund, Florian Schmitz</vendor>
+    <description>[U3Helper required] With this software you can burn CD-R, CD-RW DVD+R/RW DVD-R/RW discs.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>10</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\cdbxp.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

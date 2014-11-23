@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="e3912882-1cde-4b7a-8b55-1a6dcdf4ec83" version="6.6.2.0">
+    <icon>cwpro.ico</icon>
+    <name>CodeWallet Pro</name>
+    <vendor url="http://www.developerone.com/codewalletpro/">Developer One, Inc.</vendor>
+    <description>[U3Helper required] CodeWallet Pro is the #1 secure business and personal information management tool for your Windows Mobile Pocket PC or Smartphone.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>2.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\devonecwpro2006desktop.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

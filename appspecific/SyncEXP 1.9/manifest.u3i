@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="124da751-721a-4a18-8ff9-72d7d6409570" version="1.88.0.614">
+    <icon>SyncEXP.ico</icon>
+    <name>SyncEXP</name>
+    <vendor url="http://www.syncexp.com/">SyncEXPERT</vendor>
+    <description>[U3Helper required] SyncEXP is a freeware for PC which synchronizes data fast and easy.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>0.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\SyncEXP.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

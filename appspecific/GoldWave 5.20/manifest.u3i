@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="8dd45d9e-2817-46a6-8d8f-14ba9269a221" version="5.20.0.1">
+    <icon>GoldWave.ico</icon>
+    <name>GoldWave</name>
+    <vendor url="http://www.goldwave.com/">GoldWave Inc.</vendor>
+    <description>[U3Helper required] GoldWave is the most advanced and complete audio editor available in its price range. It includes all of the common audio editing commands and effects, plus powerful built-in tools such as a batch processor/converter, a CD reader, and audio restoration filters that cost extra in other similar programs.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>4.0</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\GoldWave.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

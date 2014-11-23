@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="C90250F3-4D7D-4991-9B69-A5C5BC1C2AE6" version="7.0.0.0">
+    <icon>iexplore.ico</icon>
+    <name>Internet Explorer 7</name>
+    <vendor url="http://www.microsoft.com/">Microsoft</vendor>
+    <description>[U3Helper required] Internet Explorer 7 is a major step forward in ease of use and security.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>16</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\iexplore.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

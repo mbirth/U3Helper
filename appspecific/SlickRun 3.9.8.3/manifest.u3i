@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="766aa4fa-c3e0-48df-9ee5-7f70c8801a8f" version="3.9.8.3">
+    <icon>SlickRun.ico</icon>
+    <name>SlickRun</name>
+    <vendor url="http://bayden.com/SlickRun/">Eric Lawrence</vendor>
+    <description>[U3Helper required] SlickRun is a free floating command line utility for Windows. SlickRun gives you almost instant access to any program or website.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>1.3</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\sr.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="66d3c480-f36b-4195-972d-ded38542cc64" version="4.50.1330.0">
+    <icon>everest.ico</icon>
+    <name>EVEREST Corporate Edition</name>
+    <vendor url="http://www.lavalys.com/">Lavalys Consulting Group, Inc.</vendor>
+    <description>[U3Helper required] EVEREST Corporate Edition is an automated network audit, system change tracking and network monitoring solution for small and large corporate enterprises, based on the award-winning EVEREST Technology.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add"/>
+      <minFreeSpace>8.1</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\everest.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

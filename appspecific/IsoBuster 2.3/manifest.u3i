@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="e4f293ba-9186-4b9e-8085-389caa8d3087" version="2.3.0.1">
+    <icon>IsoBuster.ico</icon>
+    <name>IsoBuster</name>
+    <vendor url="http://www.isobuster.com/">Smart Projects</vendor>
+    <description>[U3Helper required] IsoBuster is an award winning, highly specialized and easy to use CD and DVD data recovery tool. It supports all CD and DVD formats and all common CD and DVD file-systems.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>3</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\IsoBuster.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

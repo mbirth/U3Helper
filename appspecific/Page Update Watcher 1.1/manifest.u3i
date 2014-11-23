@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="d760a5ff-f487-4ac1-95c6-bbe6e32ef036" version="1.0.0.1">
+    <icon>PWatcher.ico</icon>
+    <name>Page Update Watcher</name>
+    <vendor url="http://sourceforge.net/projects/pwatcher">Pedro Matias</vendor>
+    <description>[U3Helper required] Page Update Watcher is a program that helps you monitor your favourite web pages for updates.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>1.4</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\PageUpdateWatcher.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

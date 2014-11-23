@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="3ca37816-1d78-4c7e-9c44-2fc29861f8ff" version="0.99.9.0">
+    <icon>Newzie.ico</icon>
+    <name>Newzie</name>
+    <vendor url="http://www.newzie.com/">Arda CELEBI</vendor>
+    <description>[U3Helper required] Newzie is a news aggregator, which can be used to monitor RSS and ATOM formatted feeds, as well as normal webpages. It periodically checks your subscriptions and automatically retrieves new content. It then notifies you and presents those updates.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>3.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\Newzie.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

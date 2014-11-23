@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="bdc6fd51-7361-4512-a3cb-95cfc975930f" version="4.23.0.0">
+    <icon>hworks.ico</icon>
+    <name>Hex Workshop</name>
+    <vendor url="http://www.bpsoft.com/">BreakPoint Software, Inc.</vendor>
+    <description>[U3Helper required] Hex Workshop is a set of hexadecimal development tools for Windows that combines advanced binary editing with the ease and flexibility of a word processor. With Hex Workshop you can edit, insert, delete, cut, copy, and paste hex; print high quality customizable hex dumps; sector edit; and export to RTF, Text, or HTML for publishing. Additionally, you can goto, find, replace, compare, and calculate checksums within a file.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>4</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\hworks32.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

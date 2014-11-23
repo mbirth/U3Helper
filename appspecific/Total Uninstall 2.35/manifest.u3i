@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="f9f84265-683d-45c4-a757-e1769aebcec2" version="2.3.5.257">
+    <icon>TUn.ico</icon>
+    <name>Total Uninstall</name>
+    <vendor url="http://www.martau.com/">Gavrila Martau</vendor>
+    <description>[U3Helper required] Total Uninstall monitors any changes made to your system during the installation of a new application. The program allows you to perform a complete uninstall without having to rely on the supplied Add/Remove program which can leave files or changes behind.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>0.8</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\TUn.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

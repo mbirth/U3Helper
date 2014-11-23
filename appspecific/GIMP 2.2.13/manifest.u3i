@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="8026f653-5f47-4935-8ca9-38eb0395f522" version="2.2.0.13">
+    <icon>GIMP.ico</icon>
+    <name>The GIMP</name>
+    <vendor url="http://gimp-win.sourceforge.net/">Jernej Simoncic</vendor>
+    <description>[U3Helper required] GIMP is the GNU Image Manipulation Program. It is a freely distributed piece of software for such tasks as photo retouching, image composition and image authoring.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>15</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">appstart</appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

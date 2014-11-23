@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="a38f1ada-19cc-4cd5-84e1-23e0c14ca327" version="2.63.0.0">
+    <icon>Agama.ico</icon>
+    <name>Agama Web Buttons</name>
+    <vendor url="http://www.agamabuttons.com/">MP Software, LLC.</vendor>
+    <description>[U3Helper required] This software enables you to create professional quality, unique web buttons in a matter of minutes. With Agama web Buttons you can create a variety of 2D and 3D glassy, metallic, plastic and even XP style Animated buttons from predefined templates.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>9.3</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\Agama.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

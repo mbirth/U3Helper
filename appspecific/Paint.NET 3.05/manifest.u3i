@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="3b6280b9-d705-42e0-baf9-a08b88f71224" version="3.5.2640.26171">
+    <icon>PaintDotNet.ico</icon>
+    <name>Paint.NET</name>
+    <vendor url="http://getpaint.net/">Rick Brewster, Tom Jackson, and past contributors</vendor>
+    <description>[U3Helper required] Paint.NET is image and photo manipulation software designed to be used on computers that run newer Windows versions. It supports layers, unlimited undo, special effects, and a wide variety of useful and powerful tools.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>5.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\PaintDotNet.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

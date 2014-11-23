@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="d2763034-87eb-4ead-805b-c2b3b8766a80" version="1.8.0.224">
+    <icon>DeepBurner.ico</icon>
+    <name>DeepBurner</name>
+    <vendor url="http://www.deepburner.com/">Astonsoft Ltd.</vendor>
+    <description>[U3Helper required] DeepBurner is an advanced and extremely powerful CD and DVD burning package. It removes the hassle of making CDs, DVDs, and autoruns. It even makes it easy for you to create and print your own labels and booklets.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>3.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\DeepBurner.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

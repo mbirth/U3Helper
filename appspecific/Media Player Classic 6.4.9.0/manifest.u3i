@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="51f74fd2-93ac-4c1e-8706-5ddd1a2d7f18" version="6.4.9.0">
+    <icon>mplayerc.ico</icon>
+    <name>Media Player Classic</name>
+    <vendor url="http://sf.net/projects/guliverkli/">Gabest</vendor>
+    <description>[U3Helper required] Universal media player.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>2.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\mplayerc.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

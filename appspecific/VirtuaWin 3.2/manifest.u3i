@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="dd87e3c7-2864-4c4d-9c23-67c94dcf6147" version="3.2.0.0">
+    <icon>VirtuaWin.ico</icon>
+    <name>VirtuaWin</name>
+    <vendor url="http://virtuawin.sourceforge.net/">Johan Piculell / VirtuaWin</vendor>
+    <description>[U3Helper required] VirtuaWin is a virtual desktop manager. A VDM lets you organize applications over several virtual desktops (also called 'workspaces'). VirtuaWin is designed to be simple and elegant to use yet still be highly configurable and extensible.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>0.4</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\VirtuaWin.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

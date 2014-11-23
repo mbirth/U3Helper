@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="87119735-63e3-4003-8cff-64ba3d1e6f3c" version="1.9.0.14">
+    <icon>WikidPad.ico</icon>
+    <name>WikidPad</name>
+    <vendor url="http://www.jhorman.org/wikidPad/">Jason Horman</vendor>
+    <description>[U3Helper required] A Wiki-like notebook for storing your thoughts, ideas, todo lists, contacts, or anything else you can think of to write down.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>8.7</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\WikidPad.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

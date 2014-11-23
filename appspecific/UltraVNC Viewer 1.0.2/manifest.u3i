@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="a0cc8810-0c9c-49f8-ab01-f62917561356" version="1.1.0.2">
+    <icon>UltraVNC.ico</icon>
+    <name>UltraVNC</name>
+    <vendor url="http://ultravnc.sourceforge.net/">Homepage</vendor>
+    <description>[U3Helper required] UltraVNC: Remote desktop support software - Remote PC access - remote desktop connection software - VNC Compatibility - FileTransfer - Encryption plugins - Text chat - MS authentication</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>0.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\vncviewer.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

@@ -1,0 +1,5 @@
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\WhereIsIt-Soft\Where Is It?\3.5]
+"CatalogDir"="%U3_APP_DATA_PATH%\\Catalogs\\"
+

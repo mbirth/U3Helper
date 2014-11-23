@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="F9D48CE8-D86E-4537-9BC7-93E4C0C407FA" version="6.11.0.0">
+    <icon>SQLyog.ico</icon>
+    <name>SQLyog Enterprise</name>
+    <vendor url="http://www.webyog.com/">Webyog Softworks Pvt. Ltd.</vendor>
+    <description>[U3Helper required] SQLyog MySQL GUI is the most popular MySQL Manager and MySQL Admin Tool, combining the features of MySQL Query Browser, phpMyAdmin and various other MySQL Front Ends and MySQL Clients in a single intuitive interface.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>11.0</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstart</appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

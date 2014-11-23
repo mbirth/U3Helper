@@ -1,0 +1,41 @@
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Astonsoft]
+
+[HKEY_CURRENT_USER\Software\Astonsoft\DeepBurner]
+
+[HKEY_CURRENT_USER\Software\Astonsoft\DeepBurner\Settings]
+"Eject_BurnDone"=dword:00000001
+"Eject_EraseDone"=dword:00000000
+"InitializeASPI_SystemFirst"=dword:00000001
+"Autorun_GridEnabled"=dword:00000001
+"Autorun_GridXOrigin"=dword:00000000
+"Autorun_GridYOrigin"=dword:00000000
+"Autorun_GridStep"=dword:0000000a
+"DriveBufferSize"=dword:00000008
+"Autorun_Folder"="Autorun"
+"DefaultDrive"=""
+"Explorer_Splitter_Pos"=dword:000000b9
+"Data_View_Splitter_Pos"=dword:000000b9
+"TempPath"="%TEMP%"
+"MainSplitterPos"=dword:00000082
+"SoundsEnabled"=dword:00000001
+"BurnDoneSound"="%U3_HOST_EXEC_PATH%\\DefaultSound.wav"
+"EraseDoneSound"="%U3_HOST_EXEC_PATH%\\DefaultSound.wav"
+
+[HKEY_CURRENT_USER\Software\Astonsoft\DeepBurner\Tools]
+
+[HKEY_CURRENT_USER\Software\Astonsoft\DeepBurner\Tools\CommandStrings]
+
+[HKEY_CURRENT_USER\Software\Astonsoft\DeepBurner\Tools\Names]
+
+[HKEY_CURRENT_USER\Software\Astonsoft\DeepBurner\Tools\Paths]
+
+[HKEY_CURRENT_USER\Software\Astonsoft\DeepBurner\UI]
+"Explorer window exists"=hex:01,00,00,00
+"Settings Window"=hex:00,00,00,00,00,00,00,00,07,01,00,00,0a,01,00,00,00,1a,53,\
+  00
+"Main Window"=hex:80,00,00,00,69,00,00,00,00,03,00,00,2d,02,00,00,00,1a,53,00
+"Explorer Window"=hex:00,00,00,00,00,00,00,00,86,02,00,00,2f,01,00,00,00,1a,53,\
+  00
+

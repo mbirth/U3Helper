@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="cd3d48e6-02a7-4695-8183-f8546bb86c68" version="4.4.0.0">
+    <icon>npp.ico</icon>
+    <name>NOTEPAD++</name>
+    <vendor url="http://notepad-plus.sourceforge.net/">Don HO</vendor>
+    <description>[U3Helper required] Notepad++ is a free source code editor (and Notepad replacement), which supports several programming languages, running under the MS Windows environment.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>1.9</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\notepad++.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

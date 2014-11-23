@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="a5e9372e-99ba-4936-9f6e-b583d4fa505d" version="6.1.0.1106">
+    <icon>urlbase.ico</icon>
+    <name>URLBase</name>
+    <vendor url="http://www.terriadev.com/products/urlbase/">Terria Development</vendor>
+    <description>[U3Helper required] URLBase 6 is a powerful and easy to use bookmark manager. It provides a wide range of functionality, aimed to give you full control over your favourites and bookmarks, whether you're a novice or an expert.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>3.4</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstart</appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

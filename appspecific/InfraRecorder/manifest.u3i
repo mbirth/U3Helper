@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="26ac9520-5b73-4d0e-8e50-234b74ae7957" version="0.45.0.0">
+    <icon>InfraRecorder.ico</icon>
+    <name>Infra Recorder</name>
+    <vendor url="http://infrarecorder.sourceforge.net/">Christian Kindahl</vendor>
+    <description>[U3Helper required] Infra Recorder is a free CD/DVD burning solution for Microsoft Windows. It offers a wide range of powerful features; all through an easy to use application interface and Windows Explorer integration.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>3.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\InfraRecorder.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

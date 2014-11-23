@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="22f0ee30-7a14-4899-9cbb-654ac5f115c5" version="3.0.0.7">
+    <icon>dude.ico</icon>
+    <name>The DUDE</name>
+    <vendor url="http://www.mikrotik.com/dude/">MikroTik</vendor>
+    <description>[U3Helper required] The Mikrotik Network Monitor application, the DUDE will discover your network layout and start monitoring the services and link speed, will allow you to connect to the devices, make your own maps and more!</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>7.6</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\dude.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

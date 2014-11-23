@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="11752db5-c642-4c4b-9c8a-2e28ea6300fc" version="1.0.4.0">
+    <icon>FTPUpdateSearcher.ico</icon>
+    <name>FTPUpdateSearcher</name>
+    <vendor url="http://www.ftpupdatesearcher.com/">FTPUpdateSearcher.com</vendor>
+    <description>[U3Helper required] FTPUpdateSearcher is an ultimately useful solution for managing FTP servers in either a local or global network, searching for new FTP servers, and, especially, catching and downloading updates.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>2</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\FtpUpdateSearcher.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

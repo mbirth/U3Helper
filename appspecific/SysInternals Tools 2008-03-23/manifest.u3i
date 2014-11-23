@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="c2298d0b-0523-401c-b52c-cb64777d3c6f" version="2008.03.23.0">
+    <icon>SysInternals.ico</icon>
+    <name>SysInternals Tools</name>
+    <vendor url="http://www.sysinternals.com/">Sysinternals</vendor>
+    <description>[U3Helper required] Sysinternals provides you with advanced utilities, technical information, and source code related to Windows internals that you won't find anywhere else.</description>
+    <options>
+      <upgrade appData="overwrite" deviceExec="overwrite" />
+      <minFreeSpace>6.7</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart workingdir="%U3_APP_DATA_PATH%" cmd="%U3_HOST_EXEC_PATH%\ASuite.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

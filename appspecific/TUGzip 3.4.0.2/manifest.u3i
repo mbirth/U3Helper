@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="1480d5fb-6362-4f70-8747-40ba4fc78478" version="3.4.0.2">
+    <icon>TUGZip.ico</icon>
+    <name>TUGZip</name>
+    <vendor url="http://www.tugzip.com/">Christian Kindahl</vendor>
+    <description>[U3Helper required] TUGZip is a powerful award-winning freeware archiving utility that provides support for a wide range of compressed, encoded and disc-image files, as well as very powerful features.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>7</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart workingdir="%U3_APP_DATA_PATH%" cmd="%U3_HOST_EXEC_PATH%\TUGZip.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

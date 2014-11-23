@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="4c4e0082-bbd5-4d9e-9fb5-eaff20ac0964" version="3.1.0.12">
+    <icon>bwgen.ico</icon>
+    <name>BrainWave Generator</name>
+    <vendor url="http://www.bwgen.com/">Noromaa Solutions</vendor>
+    <description>[U3Helper required] BrainWave Generator generates binaural beats that change your brain frequency towards the desired state, be it relaxation or enhanced attention.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>8.5</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\Bwgen.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

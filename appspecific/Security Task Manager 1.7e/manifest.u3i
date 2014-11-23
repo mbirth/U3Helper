@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="8f8b58d4-b271-4b4f-9bf8-17c654de28f9" version="1.7.4.0">
+    <icon>TaskMan.ico</icon>
+    <name>Security Task Manager</name>
+    <vendor url="http://www.neuber.com/taskmanager/">Neuber Software</vendor>
+    <description>[U3Helper required] Shows detailed information about all running processes: file path, description, security risk rating, start time, icon.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>1.1</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\TaskMan.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

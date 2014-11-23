@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="a8e7615a-87c1-4d4d-9d7b-381c9fdbff28" version="2.1.2.100">
+    <icon>CodeBank.ico</icon>
+    <name>CodeBank2</name>
+    <vendor url="http://www.zeraha.org/">Nikola Dachev</vendor>
+    <description>[U3Helper required] It allows you to maintain a hierachical database of textual information like: programming code snippets, notes, links, quotes, SQL queries and whatever you like you name it.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>1</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\CodeBank.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

@@ -1,0 +1,19 @@
+<u3manifest version="1.0">
+   <application uuid="2e0c367a-cd3a-4921-b091-40c7610ef88b" version="1.2.0.47">
+    <icon>GnuPG.ico</icon>
+    <name>Windows Privacy Tools</name>
+    <vendor url="http://winpt.sourceforge.net/">Timo Schulz and more</vendor>
+    <description>[U3Helper required] WinPT is a collection of applications for digital encryption and signing of content. WinPT is GnuPG-based, compatible with OpenPGP compliant software (like PGP).</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>2.1</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <deviceInstall cmd="%U3_DEVICE_EXEC_PATH%\prepare.cmd"></deviceInstall>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\WinPT.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

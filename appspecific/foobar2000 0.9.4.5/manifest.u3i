@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="4603c7b4-103c-4eec-b097-1807de1d366e" version="0.9.4.5">
+    <icon>fb2k.ico</icon>
+    <name>foobar2000</name>
+    <vendor url="http://www.foobar2000.org/">Peter Pawlowski</vendor>
+    <description>[U3Helper required] Foobar2000 is an advanced audio player for the Windows platform. Some of the basic features include full unicode support, ReplayGain support and native support for several popular audio formats.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>11.2</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\foobar2000.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

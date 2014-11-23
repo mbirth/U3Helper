@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="5cefe6ba-7c25-4980-a4da-a71af361af5c" version="4.0.0.27">
+    <icon>WinWAP.ico</icon>
+    <name>WinWAP</name>
+    <vendor url="http://www.winwap.com/">Winwap Technologies Oy</vendor>
+    <description>[U3Helper required] The WAP browser is a mobile Internet browser that allows you to use the mobile Internet services you would use on your phone's built-in browser.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>3</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\WinWAP4.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

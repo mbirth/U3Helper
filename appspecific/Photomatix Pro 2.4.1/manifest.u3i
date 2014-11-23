@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="b5f8a6c1-a592-4cde-895f-f6e52c0a6f7d" version="2.4.0.21">
+    <icon>PhotomatixPro.ico</icon>
+    <name>Photomatix Pro</name>
+    <vendor url="http://www.hdrsoft.com/">HDRsoft SARL</vendor>
+    <description>[U3Helper required] Merge differently exposed photos into one image with details in both highlights and shadows.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>2.3</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\PhotomatixPro.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

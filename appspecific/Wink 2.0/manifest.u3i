@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="acf5f533-1854-45be-9b04-8cc901bddb4d" version="2.0.0.0">
+    <icon>Wink.ico</icon>
+    <name>Wink</name>
+    <vendor url="http://www.debugmode.com/wink/">Satish Kumar. S.</vendor>
+    <description>[U3Helper required] Wink is a Tutorial and Presentation creation software, primarily aimed at creating tutorials on how to use software (like a tutor for MS-Word/Excel etc). Using Wink you can capture screenshots, add explanations boxes, buttons, titles etc and generate a highly effective tutorial for your users.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>3.3</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\Wink.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

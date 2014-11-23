@@ -1,0 +1,18 @@
+<u3manifest version="1.0">
+   <application uuid="74ba2afa-a7de-495f-b402-85fda7dac560" version="1.3.5.0">
+    <icon>RocketDock.ico</icon>
+    <name>RocketDock</name>
+    <vendor url="http://rocketdock.com/">Punk Labs</vendor>
+    <description>[U3Helper required] RocketDock is a smoothly animated, alpha blended application launcher. It provides a nice clean interface to drop shortcuts on for easy access and organization. With each item completely customizable there is no end to what you can add and launch from the dock.</description>
+    <options>
+      <upgrade appData="add" deviceExec="add" />
+      <minFreeSpace>3.4</minFreeSpace>
+    </options>
+  </application>
+  <actions>
+    <hostConfigure cmd="%U3_DEVICE_EXEC_PATH%\..\..\0f90f88c-5e05-4cab-8c3a-e1c0112b06fd\Exec\U3Helper.exe">config</hostConfigure>
+    <appStart cmd="%U3_HOST_EXEC_PATH%\RocketDock.exe"></appStart>
+    <appStop cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">appstop</appStop>
+    <hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Helper.exe">unconfig</hostCleanUp>
+  </actions>
+</u3manifest>

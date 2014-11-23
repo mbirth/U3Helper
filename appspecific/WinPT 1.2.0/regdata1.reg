@@ -1,0 +1,42 @@
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\GNU\GnuPG]
+"HomeDir"="%U3_DEVICE_DOCUMENT_PATH%\\GnuPG Keyrings"
+"OptFile"="%U3_DEVICE_DOCUMENT_PATH%\\GnuPG Keyrings\\gpg.conf"
+"gpgProgram"="%U3_HOST_EXEC_PATH%\\GnuPG\\gpg.exe"
+
+[HKEY_CURRENT_USER\Software\WinPT]
+"Extensions"="0"
+"DisableHotkeys"="1"
+"WordWrap"="78"
+"KM_Pos_X"="50"
+"KM_Pos_Y"="204"
+"WipeClipboard"="1"
+"CacheTime"="30"
+"FastMode"="0"
+"Viewer"="1"
+"KeylistMode"="0"
+"WipeMode"="0"
+"AlwaysTrust"="0"
+"AutoBackup"="0"
+"BackupMode"="0"
+"ClipEncrypt"=" "
+"ClipDecrypt"=" "
+"ClipSign"=" "
+"ClipSignEnc"=" "
+"CwsEncrypt"=" "
+"CwsDecrypt"=" "
+"CwsSign"=" "
+"CwsSignEnc"=" "
+"NoCompressMultiMedia"="0"
+"Expert"="1"
+"Install Directory"="%U3_HOST_EXEC_PATH%"
+"KeyserverConfig"="%U3_DEVICE_DOCUMENT_PATH%\\GnuPG Keyrings\\keyserver.conf"
+"nKeys"="7"
+"FMProgressBar"="1"
+"KMColumnSize"=hex:f0,00,4e,00,34,00,42,00,3c,00,42,00,3a,00,48,00
+
+[HKEY_CURRENT_USER\Software\WinPT\Keyserver]
+"Default"="hkp://sks.keyserver.penguin.de"
+"Default_Port"="11371"
+

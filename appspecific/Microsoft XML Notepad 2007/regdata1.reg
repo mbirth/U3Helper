@@ -1,0 +1,5 @@
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Microsoft\XmlNotepad.2007]
+"InstallDir"="%U3_HOST_EXEC_PATH%\\"
+
