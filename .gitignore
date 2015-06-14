@@ -2,6 +2,7 @@ test*
 *.xpm
 U3Helper.exe
 U3Helper.ini
+!/appspecific/**/U3Helper.ini
 STORY
 *.u3p
 *.zip
